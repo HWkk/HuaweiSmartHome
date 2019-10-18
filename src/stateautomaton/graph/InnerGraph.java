@@ -35,6 +35,10 @@ public class InnerGraph implements Graph {
         leaveCounts.set(index, leaveCounts.get(index) + 1);
     }
 
+    public double getLeavePercent(int index) {
+        return totalLeaveCount == 0 ? 0.0 : ((double)leaveCounts.get(index) / totalLeaveCount);
+    }
+
     public Attribute getAvg() {
         Attribute attribute = new Attribute();
         if(states.size() == 0) return attribute;

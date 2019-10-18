@@ -54,6 +54,10 @@ public class OuterState implements State{
         totalInCount++;
     }
 
+    public double getInNeighborPercent(OuterState state) {
+        return (double)inNeighborsCount.getOrDefault(state, 0) / totalInCount;
+    }
+
     public void addInnerState(InnerState state, String deviceName) {
 //        if(checkNormal(state, deviceName))
             innerGraph.addInnerState(state);

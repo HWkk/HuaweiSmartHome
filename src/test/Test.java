@@ -25,12 +25,15 @@ public class Test {
 
 //        String deviceName = EntityName.AIR_HUMIDIFIER_NAME;
         String deviceName = EntityName.AIR_PURIFIER_NAME;
-        int getAttrTimeGap = 10;
-        int callServiceTimeGap = 30;
+        int getAttrTimeGap = 3;
+        int callServiceTimeGap = 10;
 
         OuterGraph graph = Caller.init(deviceName, getAttrTimeGap, callServiceTimeGap);
 
         new Thread(new CallServiceThread(deviceName)).start();
         new Thread(new GetAttributeThread(deviceName, graph)).start();
+
+//        HAScript.getAllServices();
+//        HAScript.getAllAttributes(deviceName);
     }
 }

@@ -77,12 +77,12 @@ public class OuterGraph implements Graph {
         if(state == preState) {
             time += Constants.GET_ATTRIBUTE_TIME_GAP;
         } else {
-            time = 0;
             if(preState != null) {
                 Edge edge = new Edge(preState, state, ServiceName.preService);
                 addEdge(edge);
                 preState.leaveState(time);
             }
+            time = 0;
         }
         state.addInnerState(new InnerState(time, attribute), deviceName);
         preState = state;
@@ -103,7 +103,8 @@ public class OuterGraph implements Graph {
         for(OuterState state : states) {
             for(Map.Entry<OuterState, Edge> entry : state.getOutNeighbors().entrySet()) {
                 graph.add(state.getName() + "->" + entry.getKey().getName());
-                graph.addLabel(entry.getValue().getEvent());
+                String percent = String.format("%.1f", entry.getKey().getInNeighborPercent(state) * 100.0);
+                graph.addLabel(entry.getValue().getEvent() + "(" + percent + "%)");
                 graph.addln();
             }
 
@@ -112,7 +113,8 @@ public class OuterGraph implements Graph {
 
             for(int i = 0; i < state.getInnerGraph().getStateSize(); i++) {
                 graph.add(state.getName() + Integer.toString(i));
-                graph.addLabel(state.getInnerGraph().getState(i).getAttribute().toString());
+                String percent = String.format("%.1f", state.getInnerGraph().getLeavePercent(i) * 100.0);
+                graph.addLabel(state.getInnerGraph().getState(i).getAttribute().toString() + "(" + percent + "%)");
                 graph.addln();
                 if(i != 0) {
                     graph.add(state.getName() + Integer.toString(i - 1) + "->" + state.getName() + Integer.toString(i));
