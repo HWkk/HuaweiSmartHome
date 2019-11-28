@@ -10,6 +10,9 @@ public class Constants {
     //调用服务的时间间隔，单位：秒
     public static int CALL_SERVICE_TIME_GAP = 10;
 
+    //在调用服务一定时间间隔后，再获取属性，时间间隔为该值
+    public static int GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP = 5;
+
     //属性值数量
     public static int ATTRIBUTE_DIMENSION = 10;
 

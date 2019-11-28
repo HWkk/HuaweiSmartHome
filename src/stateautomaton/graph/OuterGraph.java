@@ -130,4 +130,8 @@ public class OuterGraph implements Graph {
         graph.endGraph();
         graph.run();
     }
+
+//    public boolean hasFinishedTest() {
+//
+//    }
 }
