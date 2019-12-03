@@ -25,6 +25,7 @@ public class Constants {
     //设备名称（entity_id）
     public static String DEVICE_NAME = EntityName.AIR_HUMIDIFIER_NAME;
 
-    //图可视化的txt和png所在目录
+    //图可视化的txt、png以及model存储目录
     public static String graphDir = "/Users/kk/Documents/ISCAS/HuaweiSmartHome/implementation_test/Result/";
+
 }

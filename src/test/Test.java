@@ -21,17 +21,22 @@ public class Test {
 //        graph.print();
 //    }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
 //        String deviceName = EntityName.AIR_HUMIDIFIER_NAME;
         String deviceName = EntityName.AIR_PURIFIER_NAME;
-        int getAttrTimeGap = 10;
-        int callServiceTimeGap = 60;
-        int getAttrAfterCallingTimeGap = 30;
+        int getAttrTimeGap = 5;
+        int callServiceTimeGap = 90;
+        int getAttrAfterCallingTimeGap = 60;
 
         OuterGraph graph = Caller.init(deviceName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
-        new Thread(new CallServiceAndGetAttrThread(deviceName, graph)).start();
+//        Thread buildGraphThread = new Thread(new BuildGraphPhase(deviceName, graph));
+//        buildGraphThread.start();
+//        buildGraphThread.join();
+//        graph = FileUtils.readFromFile(Constants.graphDir + deviceName + "/model");
+//        graph.print();
 
+        new Thread(new CheckDataPhase(deviceName)).start();
 
 //        new Thread(new CallServiceThread(deviceName)).start();
 //        new Thread(new GetAttributeThread(deviceName, graph)).start();

@@ -1,27 +1,44 @@
 package stateautomaton.state;
 
 import homeassistant.AttributesName;
+import homeassistant.ServiceName;
 import stateautomaton.attribute.Attribute;
 import stateautomaton.graph.Edge;
 import stateautomaton.graph.InnerGraph;
 import utils.Constants;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.HashMap;
+import java.util.Random;
 
-public class OuterState implements State{
+public class OuterState implements State, Externalizable {
 
     private HashMap<OuterState, Edge> outNeighbors;
     private HashMap<OuterState, Integer> inNeighborsCount;
     private InnerGraph innerGraph;
     private String name;
     private int totalInCount;
+    private boolean[] serviceCalled;
 
-    public OuterState(String name) {
+    public OuterState(String name, String deviceName) {
         outNeighbors = new HashMap<>();
         inNeighborsCount = new HashMap<>();
         innerGraph = new InnerGraph();
         this.name = name;
         totalInCount = 0;
+        serviceCalled = new boolean[ServiceName.getServices(deviceName).size()];
+    }
+
+    public OuterState() {
+        outNeighbors = null;
+        inNeighborsCount = null;
+        innerGraph = null;
+        name = null;
+        totalInCount = 0;
+        serviceCalled = null;
     }
 
     public HashMap<OuterState, Edge> getOutNeighbors() {
@@ -86,6 +103,26 @@ public class OuterState implements State{
         innerGraph.addLeaveCount(time);
     }
 
+    public boolean serviceAllCalled() {
+        for(boolean b : serviceCalled)
+            if(!b) return false;
+        return true;
+    }
+
+    public int getUncalled() {
+        int index = 0;
+        Random rand = new Random();
+        while(serviceCalled[index]) {
+            index = rand.nextInt(serviceCalled.length);
+        }
+        serviceCalled[index] = true;
+        return index;
+    }
+
+    public int getServiceSize() {
+        return serviceCalled.length;
+    }
+
     @Override
     public int hashCode() {
         return name.hashCode();
@@ -110,5 +147,26 @@ public class OuterState implements State{
         sb.append("innerStates: ");
         sb.append(innerGraph.toString() + "\n");
         return sb.toString();
+    }
+
+    @Override
+    public void writeExternal(final ObjectOutput o) throws IOException {
+        o.writeUTF(name);
+        o.writeInt(totalInCount);
+        o.writeObject(innerGraph);
+        o.writeObject(serviceCalled);
+        o.writeObject(inNeighborsCount);
+        o.writeObject(outNeighbors);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void readExternal(final ObjectInput o) throws IOException, ClassNotFoundException {
+        name = o.readUTF();
+        totalInCount = o.readInt();
+        innerGraph = (InnerGraph)o.readObject();
+        serviceCalled = (boolean[])o.readObject();
+        inNeighborsCount = (HashMap<OuterState, Integer>)o.readObject();
+        outNeighbors = (HashMap<OuterState, Edge>)o.readObject();
     }
 }

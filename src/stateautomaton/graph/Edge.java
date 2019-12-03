@@ -2,7 +2,9 @@ package stateautomaton.graph;
 
 import stateautomaton.state.OuterState;
 
-public class Edge {
+import java.io.Serializable;
+
+public class Edge implements Serializable {
 
     private OuterState source;
     private OuterState target;

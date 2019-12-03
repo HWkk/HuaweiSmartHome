@@ -14,8 +14,11 @@ import utils.DateUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class OuterGraph implements Graph {
+
+    private static final long serialVersionUID = 1L;
 
     private List<OuterState> states;
     private OuterState preState = null;
@@ -41,6 +44,10 @@ public class OuterGraph implements Graph {
             addState(state);
     }
 
+    public OuterState getPreState() {
+        return preState;
+    }
+
 //    public void buildGraph(List<Data> input) {
 //        OuterState preState = null;
 //        int time = 0;
@@ -64,16 +71,23 @@ public class OuterGraph implements Graph {
 //        }
 //    }
 
+    public int callService() {
+        if(preState == null)
+            return 0;
+        if(preState.serviceAllCalled())
+            return new Random().nextInt(preState.getServiceSize());
+        return preState.getUncalled();
+    }
+
     public void processData(Data data) {
         String mode = data.getMode();
         Attribute attribute = data.getAttribute();
         if(!ModeMap.containsState(mode)) {
-            ModeMap.addState(mode);
+            ModeMap.addState(mode, deviceName);
             addState(ModeMap.getState(mode));
         }
 
         OuterState state = ModeMap.getState(mode);
-
         if(state == preState) {
             time += Constants.GET_ATTRIBUTE_TIME_GAP;
         } else {
@@ -88,11 +102,26 @@ public class OuterGraph implements Graph {
         preState = state;
     }
 
+    public void checkData(Data data) {
+        String mode = data.getMode();
+        Attribute attribute = data.getAttribute();
+        InnerState innerState = new InnerState(time, attribute);
+
+        OuterState state = ModeMap.getState(mode);
+        if(state == preState) {
+            time += Constants.GET_ATTRIBUTE_TIME_GAP;
+        } else {
+            time = 0;
+        }
+        if(state.checkNormal(innerState, deviceName)) {
+            System.out.println("data " + data.toString() + " is normal");
+        }
+    }
+
     public void print() {
         System.out.println("Current States");
         for(OuterState state : states) {
-//            if(state.getOutNeighbors().size() != 0)
-                System.out.println(state.toString());
+            System.out.println(state.toString());
         }
     }
 
@@ -131,7 +160,14 @@ public class OuterGraph implements Graph {
         graph.run();
     }
 
-//    public boolean hasFinishedTest() {
-//
-//    }
+    public boolean hasFinishedTest(String deviceName) {
+        //如果state都还不全，那肯定没完成
+        if(states.size() < ServiceName.getServices(deviceName).size())
+            return false;
+        for(OuterState state : states) {
+            if(!state.serviceAllCalled())
+                return false;
+        }
+        return true;
+    }
 }

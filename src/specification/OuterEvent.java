@@ -12,7 +12,8 @@ public class OuterEvent implements Event {
 
     public static void addEvent(String event) {
         if(!eventMap.containsKey(event))
-            eventMap.put(event, new OuterState(event));
+            //TODO: 这块的deviceName不合适
+            eventMap.put(event, new OuterState(event, ""));
     }
 
     public static boolean containsEvent(String event) {

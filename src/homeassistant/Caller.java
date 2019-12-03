@@ -36,6 +36,18 @@ public class Caller {
         HAScript.callService(deviceName, services.get(index));
     }
 
+    public static void callService(String deviceName, OuterGraph graph) {
+        List<String> services = ServiceName.getServices(deviceName);
+        int index = -1;
+
+        while(true) {
+            index = graph.callService();
+            if(index != preIndex) break;
+        }
+        preIndex = index;
+        HAScript.callService(deviceName, services.get(index));
+    }
+
     public static OuterGraph init(String deviceName, int getAttrTimeGap, int callServiceTimeGap, int getAttrAfterCallingTimeGap) {
 
         Constants.DEVICE_NAME = deviceName;

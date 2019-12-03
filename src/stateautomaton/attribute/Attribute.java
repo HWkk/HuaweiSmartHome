@@ -2,9 +2,10 @@ package stateautomaton.attribute;
 
 import utils.Constants;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Attribute {
+public class Attribute implements Serializable {
 
     private double[] attributes;
     private int dimension;

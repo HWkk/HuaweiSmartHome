@@ -2,7 +2,9 @@ package data;
 
 import stateautomaton.attribute.Attribute;
 
-public class Data {
+import java.io.Serializable;
+
+public class Data implements Serializable{
 
     private String mode;
     private Attribute attribute;

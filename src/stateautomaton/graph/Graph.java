@@ -1,5 +1,7 @@
 package stateautomaton.graph;
 
-public interface Graph {
+import java.io.Serializable;
+
+public interface Graph extends Serializable {
 
 }

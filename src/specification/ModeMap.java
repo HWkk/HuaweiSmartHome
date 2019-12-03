@@ -10,9 +10,9 @@ public class ModeMap {
 
     private static HashMap<String, OuterState> map = new HashMap<>();
 
-    public static void addState(String mode) {
+    public static void addState(String mode, String deviceName) {
         if(!map.containsKey(mode))
-            map.put(mode, new OuterState(mode));
+            map.put(mode, new OuterState(mode, deviceName));
     }
 
     public static boolean containsState(String mode) {
@@ -28,5 +28,13 @@ public class ModeMap {
         for(OuterState state : map.values())
             list.add(state);
         return list;
+    }
+
+    public static HashMap<String, OuterState> getMap() {
+        return map;
+    }
+
+    public static void setMap(HashMap<String, OuterState> m) {
+        map = m;
     }
 }
