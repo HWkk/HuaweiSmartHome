@@ -46,7 +46,7 @@ public class BuildGraphPhase implements Runnable{
             }
         }
         System.out.println("Test Finished. Model Completed.");
-        FileUtils.saveToFile(Constants.graphDir + deviceName + "/model", graph);
-        FileUtils.saveToFile(Constants.graphDir + deviceName + "/modeMap", ModeMap.getMap());
+        FileUtils.saveToFile(Constants.GRAPH_DIR + deviceName + "/model1", graph);
+        FileUtils.saveToFile(Constants.GRAPH_DIR + deviceName + "/modeMap1", ModeMap.getMap());
     }
 }

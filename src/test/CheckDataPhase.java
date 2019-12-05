@@ -19,8 +19,8 @@ public class CheckDataPhase implements Runnable{
 
     public CheckDataPhase(String deviceName) {
         this.deviceName = deviceName;
-        this.graph = (OuterGraph) FileUtils.readFromFile(Constants.graphDir + deviceName + "/model");
-        ModeMap.setMap((HashMap<String, OuterState>)FileUtils.readFromFile(Constants.graphDir + deviceName + "/modeMap"));
+        this.graph = (OuterGraph) FileUtils.readFromFile(Constants.GRAPH_DIR + deviceName + "/model1");
+        ModeMap.setMap((HashMap<String, OuterState>)FileUtils.readFromFile(Constants.GRAPH_DIR + deviceName + "/modeMap1"));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class CheckDataPhase implements Runnable{
             int upperBound = Constants.CALL_SERVICE_TIME_GAP;
             int nextServiceCallGap = new Random().nextInt(upperBound - lowerBound) + lowerBound;
 
-            while((System.currentTimeMillis() - start) / 1000 < nextServiceCallGap) {
+            while((System.currentTimeMillis() - start) / 1000 < upperBound) {
                 Data data = Caller.getAttribute(deviceName);
                 graph.checkData(data);
                 Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);

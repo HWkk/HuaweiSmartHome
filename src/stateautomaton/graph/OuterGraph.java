@@ -126,7 +126,7 @@ public class OuterGraph implements Graph {
     }
 
     public void toGraph() {
-        GraphViz graph = new GraphViz(Constants.graphDir + deviceName + "/graph/", DateUtils.getDate());
+        GraphViz graph = new GraphViz(Constants.GRAPH_DIR + deviceName + "/graph/", DateUtils.getDate());
         graph.startGraph();
 
         for(OuterState state : states) {

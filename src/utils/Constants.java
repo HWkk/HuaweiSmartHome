@@ -20,12 +20,15 @@ public class Constants {
     public static double DECAY_FACTOR = 0.5;
 
     //异常检测时的溢出阈值
-    public static double ABNORMAL_THRESHOLD = 0.1;
+    public static double ABNORMAL_THRESHOLD = 0.5;
 
     //设备名称（entity_id）
     public static String DEVICE_NAME = EntityName.AIR_HUMIDIFIER_NAME;
 
     //图可视化的txt、png以及model存储目录
-    public static String graphDir = "/Users/kk/Documents/ISCAS/HuaweiSmartHome/implementation_test/Result/";
+    public static String GRAPH_DIR = "/Users/kk/Documents/ISCAS/HuaweiSmartHome/implementation_test/Result/";
+
+    //回溯的步数
+    public static int BACK_COUNT = 5;
 
 }

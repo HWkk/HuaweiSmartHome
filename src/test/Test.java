@@ -30,10 +30,10 @@ public class Test {
         int getAttrAfterCallingTimeGap = 60;
 
         OuterGraph graph = Caller.init(deviceName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
-//        Thread buildGraphThread = new Thread(new BuildGraphPhase(deviceName, graph));
-//        buildGraphThread.start();
-//        buildGraphThread.join();
-//        graph = FileUtils.readFromFile(Constants.graphDir + deviceName + "/model");
+        Thread buildGraphThread = new Thread(new BuildGraphPhase(deviceName, graph));
+        buildGraphThread.start();
+        buildGraphThread.join();
+//        graph = FileUtils.readFromFile(Constants.GRAPH_DIR + deviceName + "/model");
 //        graph.print();
 
         new Thread(new CheckDataPhase(deviceName)).start();

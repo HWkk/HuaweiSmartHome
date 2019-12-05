@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class OuterState implements State, Externalizable {
@@ -76,8 +77,7 @@ public class OuterState implements State, Externalizable {
     }
 
     public void addInnerState(InnerState state, String deviceName) {
-//        if(checkNormal(state, deviceName))
-            innerGraph.addInnerState(state);
+        innerGraph.addInnerState(state);
     }
 
     public boolean checkNormal(InnerState state, String deviceName) {
@@ -93,10 +93,69 @@ public class OuterState implements State, Externalizable {
                 String attrName = AttributesName.getAttributes(deviceName).get(i);
                 StringBuilder sb = new StringBuilder(attrName + " is too ");
                 sb.append(curAttr > avgAttr ? "high!" : "low!");
+                sb.append(" Most possible reason is: " + findAbnormalReason(i, state));
                 System.out.println(sb.toString());
             }
         }
         return normal;
+    }
+
+    public String findAbnormalReason(int attrIndex, InnerState state) {
+
+        InnerState pre = null, curInnerState = state;
+        OuterState curOuter = this;
+        int index = state.getTime() / curOuter.getInnerGraph().getStateSize();
+        if(index >= curOuter.getInnerGraph().getStateSize())
+            index = curOuter.getInnerGraph().getStateSize() - 1;
+        double maxInfluence = 0.0;
+        String event = "";
+
+        for(int i = 0; i < Constants.BACK_COUNT; i++) {
+            String curEvent = "";
+            if(index == 0) {
+                pre = curInnerState;
+                OuterState newOuter = curOuter.findMaxPreOuter();
+                curInnerState = curOuter.findMaxInner();
+                curEvent = "Operation " + newOuter.getOutNeighbors().get(curOuter).getEvent();
+//                curEvent = "Working too long or sudden changes in environment.";
+                curOuter = newOuter;
+            } else {
+                pre = curInnerState;
+                curInnerState = curOuter.getInnerGraph().getState(--index);
+                curEvent = "Working too long or sudden changes in environment.";
+            }
+            double influence = Math.abs(pre.getAttribute().getAttribute(attrIndex) - curInnerState.getAttribute().getAttribute(attrIndex));
+            if (influence > maxInfluence) {
+                maxInfluence = influence;
+                event = curEvent;
+            }
+        }
+        return event;
+    }
+
+    public OuterState findMaxPreOuter() {
+        OuterState res = null;
+        int maxFrequency = 0;
+        for(Map.Entry<OuterState, Integer> entry : inNeighborsCount.entrySet()) {
+            if(entry.getValue() > maxFrequency) {
+                maxFrequency = entry.getValue();
+                res = entry.getKey();
+            }
+        }
+        return res;
+    }
+
+    public InnerState findMaxInner() {
+        InnerState res = null;
+        double maxPercentage = 0.0;
+        for(int i = 0; i < innerGraph.getStateSize(); i++) {
+            double p = innerGraph.getLeavePercent(i);
+            if(p > maxPercentage) {
+                maxPercentage = p;
+                res = innerGraph.getState(i);
+            }
+        }
+        return res;
     }
 
     public void leaveState(int time) {
