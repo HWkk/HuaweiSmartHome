@@ -33,9 +33,9 @@ public class Test {
         Thread buildGraphThread = new Thread(new BuildGraphPhase(deviceName, graph));
         buildGraphThread.start();
         buildGraphThread.join();
-//        graph = FileUtils.readFromFile(Constants.GRAPH_DIR + deviceName + "/model");
-//        graph.print();
-
+////        graph = FileUtils.readFromFile(Constants.GRAPH_DIR + deviceName + "/model");
+////        graph.print();
+//
         new Thread(new CheckDataPhase(deviceName)).start();
 
 //        new Thread(new CallServiceThread(deviceName)).start();

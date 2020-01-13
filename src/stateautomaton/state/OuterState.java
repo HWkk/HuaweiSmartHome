@@ -115,9 +115,9 @@ public class OuterState implements State, Externalizable {
             if(index == 0) {
                 pre = curInnerState;
                 OuterState newOuter = curOuter.findMaxPreOuter();
-                curInnerState = curOuter.findMaxInner();
+                index = newOuter.findMaxInner();
+                curInnerState = newOuter.getInnerGraph().getState(index);
                 curEvent = "Operation " + newOuter.getOutNeighbors().get(curOuter).getEvent();
-//                curEvent = "Working too long or sudden changes in environment.";
                 curOuter = newOuter;
             } else {
                 pre = curInnerState;
@@ -145,14 +145,14 @@ public class OuterState implements State, Externalizable {
         return res;
     }
 
-    public InnerState findMaxInner() {
-        InnerState res = null;
+    public int findMaxInner() {
+        int res = 0;
         double maxPercentage = 0.0;
         for(int i = 0; i < innerGraph.getStateSize(); i++) {
             double p = innerGraph.getLeavePercent(i);
             if(p > maxPercentage) {
                 maxPercentage = p;
-                res = innerGraph.getState(i);
+                res = i;
             }
         }
         return res;

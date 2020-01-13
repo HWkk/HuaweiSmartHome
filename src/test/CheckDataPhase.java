@@ -37,7 +37,7 @@ public class CheckDataPhase implements Runnable{
             int upperBound = Constants.CALL_SERVICE_TIME_GAP;
             int nextServiceCallGap = new Random().nextInt(upperBound - lowerBound) + lowerBound;
 
-            while((System.currentTimeMillis() - start) / 1000 < upperBound) {
+            while((System.currentTimeMillis() - start) / 1000 < nextServiceCallGap) {
                 Data data = Caller.getAttribute(deviceName);
                 graph.checkData(data);
                 Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);

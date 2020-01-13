@@ -19,9 +19,9 @@ public class GetAttributeThread implements Runnable{
     public void run() {
         while(true) {
             Data data = Caller.getAttribute(deviceName);
-            graph.processData(data);
-            graph.print();
-            graph.toGraph();
+//            graph.processData(data);
+//            graph.print();
+//            graph.toGraph();
             Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);
         }
     }

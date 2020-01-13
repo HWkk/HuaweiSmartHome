@@ -21,8 +21,8 @@ public class FileUtils {
             e.printStackTrace();
         } finally {
             try {
-                oos.close();
-                fos.close();
+                if(oos != null) oos.close();
+                if(fos != null) fos.close();
                 System.out.println("close fos and oos when saving model to file");
             } catch (IOException e) {
                 e.printStackTrace();

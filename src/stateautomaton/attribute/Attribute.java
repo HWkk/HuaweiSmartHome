@@ -8,10 +8,8 @@ import java.util.Arrays;
 public class Attribute implements Serializable {
 
     private double[] attributes;
-    private int dimension;
 
     public Attribute() {
-        dimension = Constants.ATTRIBUTE_DIMENSION;
         attributes = new double[Constants.ATTRIBUTE_DIMENSION];
     }
 
@@ -30,7 +28,7 @@ public class Attribute implements Serializable {
     }
 
     public int getDimension() {
-        return dimension;
+        return attributes.length;
     }
 
     public void mergeWithOther(Attribute other, double decay) {
