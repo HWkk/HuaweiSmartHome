@@ -3,24 +3,33 @@ package test;
 import data.Data;
 import homeassistant.Caller;
 import specification.ModeMap;
+import stateautomaton.attribute.Attribute;
 import stateautomaton.graph.OuterGraph;
 import stateautomaton.state.OuterState;
 import utils.Constants;
 import utils.FileUtils;
 import utils.Timer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class CheckDataPhase implements Runnable{
 
     String deviceName;
     OuterGraph graph;
+    HashMap<String, List<Attribute>> checkData; //key为模式，value为当前模式下的收集的取值
 
     public CheckDataPhase(String deviceName) {
         this.deviceName = deviceName;
         this.graph = (OuterGraph) FileUtils.readFromFile(Constants.GRAPH_DIR + deviceName + "/model1");
         ModeMap.setMap((HashMap<String, OuterState>)FileUtils.readFromFile(Constants.GRAPH_DIR + deviceName + "/modeMap1"));
+
+        checkData = new HashMap<>();
+        for(String mode : ModeMap.getMap().keySet())
+            checkData.put(mode, new ArrayList<Attribute>());
+        new Thread(new CheckThread(graph, checkData)).start();
     }
 
     @Override
@@ -39,7 +48,12 @@ public class CheckDataPhase implements Runnable{
 
             while((System.currentTimeMillis() - start) / 1000 < nextServiceCallGap) {
                 Data data = Caller.getAttribute(deviceName);
-                graph.checkData(data);
+
+                //在CheckThread里要读checkData，在此处要写checkData，需要加锁
+                //TODO: 需要检测正确性
+                synchronized (checkData) {
+                    checkData.get(data.getMode()).add(data.getAttribute());
+                }
                 Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);
             }
         }

@@ -1,19 +1,21 @@
 package stateautomaton.state;
 
+import data.CurveStatistics;
+import data.Data;
+import data.IQR;
 import homeassistant.AttributesName;
 import homeassistant.ServiceName;
 import stateautomaton.attribute.Attribute;
 import stateautomaton.graph.Edge;
 import stateautomaton.graph.InnerGraph;
 import utils.Constants;
+import utils.CurveUtils;
 
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class OuterState implements State, Externalizable {
 
@@ -100,8 +102,26 @@ public class OuterState implements State, Externalizable {
         return normal;
     }
 
-    public String findAbnormalReason(int attrIndex, InnerState state) {
+    public boolean checkNormal(List<Attribute> data, String deviceName) {
+        if(innerGraph.getStateSize() == 0) return true;
+        List<CurveStatistics> normalStatistics = innerGraph.getCurveStatistics();
 
+        boolean normal = true;
+        for(int i = 0; i < normalStatistics.size(); i++) {
+            List<Double> curAttr = new ArrayList<>();
+            String attrName = AttributesName.getAttributes(deviceName).get(i);
+            for(Attribute attribute : data)
+                curAttr.add(attribute.getAttribute(i));
+            double valueMedian = CurveUtils.calValueMedian(curAttr), slopeMedian = CurveUtils.calSlopeMedian(curAttr);
+            if(normalStatistics.get(i).getSlopeIQR().isOutlier(slopeMedian) || normalStatistics.get(i).getValueIQR().isOutlier(valueMedian)) {
+                normal = false;
+                System.out.println(attrName + " is abnormal.");
+            }
+        }
+        return normal;
+    }
+
+    public String findAbnormalReason(int attrIndex, InnerState state) {
         InnerState pre = null, curInnerState = state;
         OuterState curOuter = this;
         int index = state.getTime() / curOuter.getInnerGraph().getStateSize();

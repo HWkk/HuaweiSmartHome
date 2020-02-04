@@ -31,4 +31,9 @@ public class Constants {
     //回溯的步数
     public static int BACK_COUNT = 5;
 
+    //四分位距判断异常点时的阈值
+    public static double IQR_THRESHOLD = 1.5;
+
+    //异常检测的时间间隔，单位：秒
+    public static int CHECK_TIME_GAP = 50;
 }

@@ -32,8 +32,8 @@ def draw_linechart(x_name, x_values, y_name, y_legends, y_values, save_file):
         y_min = min(y_min, min(y_values[i]))
         y_max = max(y_max, max(y_values[i]))
 
-        if y_max - y_min <= 200:
-            plt.ylim(y_min - 10, y_min + 200)
+        if y_max - y_min <= 70:
+            plt.ylim(y_min - 10, y_min + 70)
         plt.plot(x_values[i], y_values[i])
 
     # y_major_locator = MultipleLocator(50)

@@ -79,6 +79,29 @@ public class OuterGraph implements Graph {
         return preState.getUncalled();
     }
 
+//    public void processData(Data data) {
+//        String mode = data.getMode();
+//        Attribute attribute = data.getAttribute();
+//        if(!ModeMap.containsState(mode)) {
+//            ModeMap.addState(mode, deviceName);
+//            addState(ModeMap.getState(mode));
+//        }
+//
+//        OuterState state = ModeMap.getState(mode);
+//        if(state == preState) {
+//            time += Constants.GET_ATTRIBUTE_TIME_GAP;
+//        } else {
+//            if(preState != null) {
+//                Edge edge = new Edge(preState, state, ServiceName.preService);
+//                addEdge(edge);
+//                preState.leaveState(time);
+//            }
+//            time = 0;
+//        }
+//        state.addInnerState(new InnerState(time, attribute), deviceName);
+//        preState = state;
+//    }
+
     public void processData(Data data) {
         String mode = data.getMode();
         Attribute attribute = data.getAttribute();
@@ -88,34 +111,35 @@ public class OuterGraph implements Graph {
         }
 
         OuterState state = ModeMap.getState(mode);
-        if(state == preState) {
-            time += Constants.GET_ATTRIBUTE_TIME_GAP;
-        } else {
+        if(state != preState) {
             if(preState != null) {
                 Edge edge = new Edge(preState, state, ServiceName.preService);
                 addEdge(edge);
-                preState.leaveState(time);
             }
-            time = 0;
         }
         state.addInnerState(new InnerState(time, attribute), deviceName);
         preState = state;
     }
 
-    public void checkData(Data data) {
-        String mode = data.getMode();
-        Attribute attribute = data.getAttribute();
-        InnerState innerState = new InnerState(time, attribute);
+//    public void checkData(Data data) {
+//        String mode = data.getMode();
+//        Attribute attribute = data.getAttribute();
+//        InnerState innerState = new InnerState(time, attribute);
+//
+//        OuterState state = ModeMap.getState(mode);
+//        if(state == preState) {
+//            time += Constants.GET_ATTRIBUTE_TIME_GAP;
+//        } else {
+//            time = 0;
+//        }
+//        if(state.checkNormal(innerState, deviceName)) {
+//            System.out.println("data " + data.toString() + " is normal");
+//        }
+//    }
 
-        OuterState state = ModeMap.getState(mode);
-        if(state == preState) {
-            time += Constants.GET_ATTRIBUTE_TIME_GAP;
-        } else {
-            time = 0;
-        }
-        if(state.checkNormal(innerState, deviceName)) {
-            System.out.println("data " + data.toString() + " is normal");
-        }
+    public void checkData(OuterState state, List<Attribute> data) {
+        if(state.checkNormal(data, deviceName))
+            System.out.println("Current state is normal.");
     }
 
     public void print() {
