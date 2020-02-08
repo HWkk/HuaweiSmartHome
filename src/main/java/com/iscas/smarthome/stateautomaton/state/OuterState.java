@@ -1,8 +1,6 @@
 package com.iscas.smarthome.stateautomaton.state;
 
 import com.iscas.smarthome.data.CurveStatistics;
-import com.iscas.smarthome.data.Data;
-import com.iscas.smarthome.data.IQR;
 import com.iscas.smarthome.homeassistant.AttributesName;
 import com.iscas.smarthome.homeassistant.ServiceName;
 import com.iscas.smarthome.stateautomaton.attribute.Attribute;
@@ -116,6 +114,7 @@ public class OuterState implements State, Externalizable {
             if(normalStatistics.get(i).getSlopeIQR().isOutlier(slopeMedian) || normalStatistics.get(i).getValueIQR().isOutlier(valueMedian)) {
                 normal = false;
                 System.out.println(attrName + " is abnormal.");
+                //TODO: 异常原因还要加上
             }
         }
         return normal;

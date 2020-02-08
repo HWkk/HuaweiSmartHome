@@ -2,19 +2,17 @@ package com.iscas.smarthome.homeassistant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class AttributesName {
 
     //key为entity_id, value为mode属性在HA中的key值
-    private static HashMap<String, String> modeAttribute;
+    private static HashMap<String, String> modeAttribute = new HashMap<>();
 
     //key为entity_id，value为要获取的属性名
-    private static HashMap<String, ArrayList<String>> attributesName;
+    private static HashMap<String, List<String>> attributesName = new HashMap<>();
 
     public static void init() {
-        modeAttribute = new HashMap<>();
-        attributesName = new HashMap<>();
-
         //空气净化器
         modeAttribute.put(EntityName.AIR_PURIFIER_NAME, "mode");
         attributesName.put(EntityName.AIR_PURIFIER_NAME, new ArrayList<String>());
@@ -40,7 +38,12 @@ public class AttributesName {
         return modeAttribute.get(entityId);
     }
 
-    public static ArrayList<String> getAttributes(String entityId) {
+    public static List<String> getAttributes(String entityId) {
         return attributesName.get(entityId);
+    }
+
+    public static void addEntity(String entityName, List<String> attributes) {
+        modeAttribute.put(entityName, "mode");
+        attributesName.put(entityName, attributes);
     }
 }

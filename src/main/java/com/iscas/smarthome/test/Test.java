@@ -1,7 +1,9 @@
 package com.iscas.smarthome.test;
 
+import com.iscas.smarthome.homeassistant.AttributesName;
 import com.iscas.smarthome.homeassistant.Caller;
 import com.iscas.smarthome.homeassistant.EntityName;
+import com.iscas.smarthome.homeassistant.ServiceName;
 import com.iscas.smarthome.stateautomaton.graph.OuterGraph;
 
 public class Test {
@@ -43,5 +45,10 @@ public class Test {
 
 //        HAScript.getAllServices();
 //        HAScript.getAllAttributes(deviceName);
+    }
+
+    public static void init() {
+        ServiceName.init();
+        AttributesName.init();
     }
 }

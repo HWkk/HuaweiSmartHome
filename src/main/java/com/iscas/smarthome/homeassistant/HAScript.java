@@ -1,13 +1,13 @@
 package com.iscas.smarthome.homeassistant;
 
 import com.iscas.smarthome.data.Data;
-import org.apache.log4j.Logger;
 import com.iscas.smarthome.utils.InputUtils;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.util.List;
 
 public class HAScript {
 
@@ -17,7 +17,7 @@ public class HAScript {
     public static Data getAttribute(String entityId) {
         Data data = null;
         try {
-            ArrayList<String> attributes = AttributesName.getAttributes(entityId);
+            List<String> attributes = AttributesName.getAttributes(entityId);
             String[] args = new String[ATTR_ARGS_PREFIX + attributes.size()];
             args[0] = "python";
             args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/homeassistant/get_attribute.py";
@@ -53,7 +53,7 @@ public class HAScript {
 
     public static void getAllAttributes(String entityId) {
         try {
-            ArrayList<String> attributes = AttributesName.getAttributes(entityId);
+            List<String> attributes = AttributesName.getAttributes(entityId);
             String[] args = new String[3];
             args[0] = "python";
             args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/homeassistant/get_all.py";

@@ -49,14 +49,10 @@ public class Caller {
     }
 
     public static OuterGraph init(String deviceName, int getAttrTimeGap, int callServiceTimeGap, int getAttrAfterCallingTimeGap) {
-
         Constants.DEVICE_NAME = deviceName;
         Constants.GET_ATTRIBUTE_TIME_GAP = getAttrTimeGap;
         Constants.CALL_SERVICE_TIME_GAP = callServiceTimeGap;
         Constants.GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP = getAttrAfterCallingTimeGap;
-
-        ServiceName.init();
-        AttributesName.init();
         return new OuterGraph(deviceName);
     }
 }
