@@ -46,4 +46,8 @@ public class AttributesName {
         modeAttribute.put(entityName, "mode");
         attributesName.put(entityName, attributes);
     }
+
+    public static void filter(String entityName) {
+
+    }
 }

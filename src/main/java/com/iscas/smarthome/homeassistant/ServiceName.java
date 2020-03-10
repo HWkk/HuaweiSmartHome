@@ -30,4 +30,8 @@ public class ServiceName {
     public static ArrayList<String> getServices(String entityId) {
         return serviceName.get(entityId);
     }
+
+    public static void filter(String entityName) {
+
+    }
 }
