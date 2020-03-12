@@ -21,7 +21,6 @@ public class CustomWebSocket {
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
-        System.out.println(this.session);
         webSockets.add(this);
         System.out.println("【websocket消息】有新的连接，总数为: " + webSockets.size());
     }

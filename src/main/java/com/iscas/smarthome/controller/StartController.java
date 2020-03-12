@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -35,14 +37,19 @@ public class StartController {
     public String getAttributes(HttpServletRequest request) {
         String entityName = request.getParameter("entityName");
         this.entityName = entityName;
-        //TODO: 通过HA获取所有属性
-        String res = AttributesName.getAttributes(entityName).toString();
+        String res = AttributesName.getAttributesFromHA(entityName).toString();
         return res.substring(1, res.length() - 1);
     }
 
     @RequestMapping("/buildModel")
     public void buildModel(HttpServletRequest request) {
-        String checkList = request.getParameter("checkList");
+        String[] strs = request.getParameter("checkList").split(",");
+        System.out.println(strs);
+        List<String> list = new ArrayList<>();
+        for(String s : strs)
+            list.add(s.trim());
+        AttributesName.setAttributesName(entityName, list);
+
         this.graph = Caller.init(entityName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
         //TODO: 要改成建模过程中实时发送图片位置
 //        Thread buildGraphThread = new Thread(new BuildGraphPhase(entityName, graph));

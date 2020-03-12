@@ -13,9 +13,9 @@
         <el-button type="primary" @click="buildModel()">开始构建模型</el-button>
 
         <p id="buildProcess"></p>
-        <img id="modelPng" src="http://img1.imgtn.bdimg.com/it/u=3982309790,3339526893&fm=26&gp=0.jpg">
-        <p></p>
+        <img id="modelPng" src="" height="300" width="500">
 
+        <p></p>
         <el-button type="primary" @click="checkData()">开始异常检测</el-button>
     </div>
 </template>
@@ -64,10 +64,10 @@ export default {
 
         buildModel() {
             var _this = this;
-            document.getElementById('buildProcess').innerHTML = '建模中';
+            document.getElementById('buildProcess').innerHTML = '建模中,模型实时变化图如下:';
             axios.get(this.GLOBAL.configip + 'buildModel?checkList=' + _this.checkList)
                 .then(function(response) {
-                    //document.getElementById('buildProcess').innerHTML = '建模完成';
+                    //document.getElementById('buildProcess').innerHTML = '建模完成,模型展示如下:';
                     //document.getElementById('modelPng').src = response.data;
                 });
         },

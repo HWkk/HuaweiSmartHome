@@ -42,6 +42,14 @@ public class AttributesName {
         return attributesName.get(entityId);
     }
 
+    public static List<String> getAttributesFromHA(String entityId) {
+        return HAScript.getAllAttributes(entityId);
+    }
+
+    public static void setAttributesName(String entityId, List<String> list) {
+        attributesName.put(entityId, list);
+    }
+
     public static void addEntity(String entityName, List<String> attributes) {
         modeAttribute.put(entityName, "mode");
         attributesName.put(entityName, attributes);

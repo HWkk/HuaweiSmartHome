@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HAScript {
@@ -20,7 +21,7 @@ public class HAScript {
             List<String> attributes = AttributesName.getAttributes(entityId);
             String[] args = new String[ATTR_ARGS_PREFIX + attributes.size()];
             args[0] = "python";
-            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/homeassistant/get_attribute.py";
+            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/get_attribute.py";
             args[2] = entityId;
             args[3] = AttributesName.getModeName(entityId);
             for(int i = ATTR_ARGS_PREFIX; i < args.length; i++)
@@ -51,12 +52,13 @@ public class HAScript {
         return data;
     }
 
-    public static void getAllAttributes(String entityId) {
+    public static List<String> getAllAttributes(String entityId) {
+        List<String> res = new ArrayList<>();
         try {
             List<String> attributes = AttributesName.getAttributes(entityId);
             String[] args = new String[3];
             args[0] = "python";
-            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/homeassistant/get_all.py";
+            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/get_all.py";
             args[2] = entityId;
 
             Process proc = Runtime.getRuntime().exec(args);// 执行py文件
@@ -65,6 +67,7 @@ public class HAScript {
             String line = null;
             while ((line = in.readLine()) != null) {
                 System.out.println(line);
+                res = getAttributeName(line);
             }
             in.close();
             proc.waitFor();
@@ -73,6 +76,17 @@ public class HAScript {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        return res;
+    }
+
+    public static List<String> getAttributeName(String s) {
+        List<String> res = new ArrayList<>();
+        String[] strs = s.split(":");
+        for(int i = 0; i < strs.length - 1; i++) {
+            strs[i] = strs[i].substring(0, strs[i].length() - 1);
+            res.add(strs[i].substring(strs[i].lastIndexOf('\'') + 1));
+        }
+        return res;
     }
 
     public static void getAllServices() {
@@ -80,7 +94,7 @@ public class HAScript {
 //            ArrayList<String> attributes = AttributesName.getAttributes(entityId);
             String[] args = new String[2];
             args[0] = "python";
-            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/homeassistant/get_service.py";
+            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/get_service.py";
 
             Process proc = Runtime.getRuntime().exec(args);// 执行py文件
             BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -103,7 +117,7 @@ public class HAScript {
 //            ArrayList<String> attributes = AttributesName.getAttributes(entityId);
             String[] args = new String[4];
             args[0] = "python";
-            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/homeassistant/call_service.py";
+            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/call_service.py";
             args[2] = entityId;
             args[3] = serviceName;
 
