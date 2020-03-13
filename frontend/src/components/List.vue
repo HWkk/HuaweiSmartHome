@@ -1,22 +1,22 @@
 
 <template>
     <div id="list">
-        <p id="demo">我的第一个段落</p>
+        <!-- p id="demo">我的第一个段落</p-->
         <vue-headful title="智能家居" />
 
         <el-input v-model="entityName" placeholder="请输入设备名称"></el-input>
-        <el-button type="primary" @click="getAttributes()">获取设备属性</el-button>
+        <el-button type="primary" @click="getAttributes()">获取过滤后的设备属性</el-button>
 
         <el-checkbox-group v-model="checkList">
             <el-checkbox v-for="attr in attributes" :label="attr"></el-checkbox>
         </el-checkbox-group>
-        <el-button type="primary" @click="buildModel()">开始构建模型</el-button>
+        <el-button type="primary" @click="buildModel()" v-if="showBuildModelButton" >开始构建模型</el-button>
 
         <p id="buildProcess"></p>
-        <img id="modelPng" src="" height="300" width="500">
+        <img id="modelPng" src="" height="300" width="500" v-if="showModelPng">
 
         <p></p>
-        <el-button type="primary" @click="checkData()">开启模型应用功能</el-button>
+        <el-button type="primary" @click="checkData()" v-if="showUseModelButton" >开启模型应用功能</el-button>
     </div>
 </template>
 <script>
@@ -29,7 +29,10 @@ export default {
         return {
             entityName: '',
             attributes:[],
-            checkList:[]
+            checkList:[],
+            showBuildModelButton:false,
+            showModelPng:false,
+            showUseModelButton:false
         }
     },
 
@@ -59,6 +62,7 @@ export default {
             axios.get(this.GLOBAL.configip + 'getAttributes?entityName=' + _this.entityName)
                 .then(function(response) {
                     _this.attributes = response.data.split(",");
+                    _this.showBuildModelButton = true;
                 });
         },
 
@@ -95,10 +99,14 @@ export default {
 
         websocketonmessage: function (message) {
             console.log(message.data);
-            document.getElementById('demo').innerHTML = message.data;
+            var _this = this;
+            //document.getElementById('demo').innerHTML = message.data;
             if(message.data == 'FinishModel') {
                 document.getElementById('buildProcess').innerHTML = '建模完成,模型展示如下:';
+                _this.showUseModelButton = true;
             } else {
+                if(!_this.showModelPng)
+                    _this.showModelPng= true;
                 document.getElementById('modelPng').src = message.data;
             }
         },
@@ -119,4 +127,8 @@ export default {
         width: 600px;
     }
 
+   .el-checkbox {
+       display: block !important;
+       //margin-top: 10px !important;
+   }
 </style>
