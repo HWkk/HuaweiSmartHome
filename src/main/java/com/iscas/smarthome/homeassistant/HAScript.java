@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HAScript {
@@ -52,8 +51,8 @@ public class HAScript {
         return data;
     }
 
-    public static List<String> getAllAttributes(String entityId) {
-        List<String> res = new ArrayList<>();
+    public static String getAllAttributes(String entityId) {
+        String res = "";
         try {
             List<String> attributes = AttributesName.getAttributes(entityId);
             String[] args = new String[3];
@@ -67,7 +66,7 @@ public class HAScript {
             String line = null;
             while ((line = in.readLine()) != null) {
                 System.out.println(line);
-                res = getAttributeName(line);
+                res = line;
             }
             in.close();
             proc.waitFor();
@@ -75,16 +74,6 @@ public class HAScript {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        return res;
-    }
-
-    public static List<String> getAttributeName(String s) {
-        List<String> res = new ArrayList<>();
-        String[] strs = s.split(":");
-        for(int i = 0; i < strs.length - 1; i++) {
-            strs[i] = strs[i].substring(0, strs[i].length() - 1);
-            res.add(strs[i].substring(strs[i].lastIndexOf('\'') + 1));
         }
         return res;
     }

@@ -42,8 +42,8 @@ public class AttributesName {
         return attributesName.get(entityId);
     }
 
-    public static List<String> getAttributesFromHA(String entityId) {
-        return HAScript.getAllAttributes(entityId);
+    public static List<String> getAttributesNameFromHA(String entityId) {
+        return filter(HAScript.getAllAttributes(entityId));
     }
 
     public static void addEntity(String entityName, List<String> attributes) {
@@ -51,7 +51,28 @@ public class AttributesName {
         attributesName.put(entityName, attributes);
     }
 
-    public static void filter(String entityName) {
-    //TODO: 属性筛选方法
+    public static List<String> filter(String line) {
+        List<String> res = new ArrayList<>();
+        String[] attributes = line.split(",");
+        for(String s : attributes) {
+            if(!s.contains(":")) continue;
+            String[] strs = s.split(":");
+            String value = strs[1].trim();
+            if(value.charAt(0) >= '0' && value.charAt(0) <= '9') {
+                String attrName = strs[0].trim();
+                res.add(attrName.substring(attrName.indexOf('\'') + 1, attrName.lastIndexOf('\'')));
+            }
+        }
+        return res;
+    }
+
+    public static List<String> getAttributeName(String s) {
+        List<String> res = new ArrayList<>();
+        String[] strs = s.split(":");
+        for(int i = 0; i < strs.length - 1; i++) {
+            strs[i] = strs[i].substring(0, strs[i].length() - 1);
+            res.add(strs[i].substring(strs[i].lastIndexOf('\'') + 1));
+        }
+        return res;
     }
 }

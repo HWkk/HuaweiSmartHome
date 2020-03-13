@@ -38,7 +38,7 @@ public class StartController {
     public String getAttributes(HttpServletRequest request) {
         String entityName = request.getParameter("entityName");
         this.entityName = entityName;
-        String res = AttributesName.getAttributesFromHA(entityName).toString();
+        String res = AttributesName.getAttributesNameFromHA(entityName).toString();
         return res.substring(1, res.length() - 1);
     }
 
