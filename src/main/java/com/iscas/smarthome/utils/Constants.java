@@ -5,13 +5,13 @@ import com.iscas.smarthome.homeassistant.EntityName;
 public class Constants {
 
     //拉取设备属性的时间间隔，单位：秒
-    public static int GET_ATTRIBUTE_TIME_GAP = 10;
+    public static int GET_ATTRIBUTE_TIME_GAP = 2;
 
     //调用服务的时间间隔，单位：秒
-    public static int CALL_SERVICE_TIME_GAP = 10;
+    public static int CALL_SERVICE_TIME_GAP = 20;
 
     //在调用服务一定时间间隔后，再获取属性，时间间隔为该值
-    public static int GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP = 5;
+    public static int GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP = 10;
 
     //属性值数量
     public static int ATTRIBUTE_DIMENSION = 10;
@@ -36,4 +36,7 @@ public class Constants {
 
     //异常检测的时间间隔，单位：秒
     public static int CHECK_TIME_GAP = 50;
+
+    //用于展示的模型图片目录
+    public static String MODEL_PNG_DIR = "/Users/kk/Repositories/HuaweiSmartHome/frontend/public/img/";
 }

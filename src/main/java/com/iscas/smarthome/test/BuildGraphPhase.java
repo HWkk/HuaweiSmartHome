@@ -7,6 +7,7 @@ import com.iscas.smarthome.stateautomaton.graph.OuterGraph;
 import com.iscas.smarthome.utils.Constants;
 import com.iscas.smarthome.utils.FileUtils;
 import com.iscas.smarthome.utils.Timer;
+import com.iscas.smarthome.websocket.CustomWebSocket;
 
 import java.util.Random;
 
@@ -14,10 +15,12 @@ public class BuildGraphPhase implements Runnable{
 
     String deviceName;
     OuterGraph graph;
+    CustomWebSocket webSocket;
 
-    public BuildGraphPhase(String deviceName, OuterGraph graph) {
+    public BuildGraphPhase(String deviceName, OuterGraph graph, CustomWebSocket webSocket) {
         this.deviceName = deviceName;
         this.graph = graph;
+        this.webSocket = webSocket;
     }
 
     @Override
@@ -39,13 +42,18 @@ public class BuildGraphPhase implements Runnable{
 
             while((System.currentTimeMillis() - start) / 1000 < nextServiceCallGap) {
                 Data data = Caller.getAttribute(deviceName);
-                graph.processData(data);
+                graph.processDataByRelativeTime(data);
+//                graph.processDataByAbsoluteTime(data);
                 graph.print();
-                graph.toGraph();
+                String fileLoc = graph.toGraph();
+                String fileName = fileLoc.substring(fileLoc.lastIndexOf("/") + 1);
+                FileUtils.copyFile(fileLoc, Constants.MODEL_PNG_DIR + deviceName + "/", fileName);
+                webSocket.sendAllMessage("/img/" + deviceName + "/" + fileName);
                 Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);
             }
         }
         System.out.println("Test Finished. Model Completed.");
+        webSocket.sendAllMessage("FinishModel");
         FileUtils.saveToFile(Constants.GRAPH_DIR + deviceName + "/model1", graph);
         FileUtils.saveToFile(Constants.GRAPH_DIR + deviceName + "/modeMap1", ModeMap.getMap());
     }

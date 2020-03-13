@@ -3,6 +3,7 @@ package com.iscas.smarthome.controller;
 import com.iscas.smarthome.homeassistant.AttributesName;
 import com.iscas.smarthome.homeassistant.Caller;
 import com.iscas.smarthome.stateautomaton.graph.OuterGraph;
+import com.iscas.smarthome.test.BuildGraphPhase;
 import com.iscas.smarthome.test.CheckDataPhase;
 import com.iscas.smarthome.websocket.CustomWebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,9 @@ public class StartController {
 
     OuterGraph graph;
     String entityName;
-    int getAttrTimeGap = 5;
-    int callServiceTimeGap = 90;
-    int getAttrAfterCallingTimeGap = 60;
+    int getAttrTimeGap = 2;
+    int callServiceTimeGap = 20;
+    int getAttrAfterCallingTimeGap = 10;
 
     @Autowired
     private CustomWebSocket webSocket;
@@ -44,29 +45,33 @@ public class StartController {
     @RequestMapping("/buildModel")
     public void buildModel(HttpServletRequest request) {
         String[] strs = request.getParameter("checkList").split(",");
-        System.out.println(strs);
         List<String> list = new ArrayList<>();
         for(String s : strs)
             list.add(s.trim());
-        AttributesName.setAttributesName(entityName, list);
+        AttributesName.addEntity(entityName, list);
 
         this.graph = Caller.init(entityName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
-        //TODO: 要改成建模过程中实时发送图片位置
-//        Thread buildGraphThread = new Thread(new BuildGraphPhase(entityName, graph));
-//        buildGraphThread.start();
-//        try {
-//            buildGraphThread.join();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-        //TODO: 信息还要加以区分，区分成建模的信息还是异常检测的信息
-        webSocket.sendAllMessage("/img/1.jpg");
+        Thread buildGraphThread = new Thread(new BuildGraphPhase(entityName, graph, webSocket));
+        buildGraphThread.start();
         try {
-            Thread.sleep(5000);
+            buildGraphThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        webSocket.sendAllMessage("/img/2.jpg");
+//        //TODO: 信息还要加以区分，区分成建模的信息还是异常检测的信息
+//        webSocket.sendAllMessage("/img/1.png");
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        webSocket.sendAllMessage("/img/2.png");
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        webSocket.sendAllMessage("FinishModel");
     }
 
     @RequestMapping("/checkData")

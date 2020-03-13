@@ -77,7 +77,8 @@ public class OuterState implements State, Externalizable {
     }
 
     public void addInnerState(InnerState state, String deviceName) {
-        innerGraph.addInnerState(state);
+        innerGraph.addInnerStateByRelativeTime(state);
+//        innerGraph.addInnerStateByAbsoluteTime(state);
     }
 
     public boolean checkNormal(InnerState state, String deviceName) {

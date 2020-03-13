@@ -51,4 +51,24 @@ public class FileUtils {
         }
         return null;
     }
+
+    public static void copyFile(String from, String toDir, String fileName) {
+        try {
+            Runtime.getRuntime().exec("mkdir -p " + toDir).waitFor();
+            String bash = "cp " + from + " " + toDir + fileName;
+            System.out.println(bash);
+            Process p = Runtime.getRuntime().exec(bash);
+            p.waitFor();
+
+            String line = "";
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            while ((line = bufferedReader.readLine()) != null) {
+                System.out.println("error: " + line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

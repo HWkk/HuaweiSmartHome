@@ -46,16 +46,12 @@ public class AttributesName {
         return HAScript.getAllAttributes(entityId);
     }
 
-    public static void setAttributesName(String entityId, List<String> list) {
-        attributesName.put(entityId, list);
-    }
-
     public static void addEntity(String entityName, List<String> attributes) {
         modeAttribute.put(entityName, "mode");
         attributesName.put(entityName, attributes);
     }
 
     public static void filter(String entityName) {
-
+    //TODO: 属性筛选方法
     }
 }

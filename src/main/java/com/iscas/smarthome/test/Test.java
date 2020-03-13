@@ -1,6 +1,5 @@
 package com.iscas.smarthome.test;
 
-import com.iscas.smarthome.homeassistant.AttributesName;
 import com.iscas.smarthome.homeassistant.Caller;
 import com.iscas.smarthome.homeassistant.EntityName;
 import com.iscas.smarthome.homeassistant.ServiceName;
@@ -32,13 +31,13 @@ public class Test {
         int getAttrAfterCallingTimeGap = 60;
 
         OuterGraph graph = Caller.init(deviceName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
-        Thread buildGraphThread = new Thread(new BuildGraphPhase(deviceName, graph));
-        buildGraphThread.start();
-        buildGraphThread.join();
-////        graph = FileUtils.readFromFile(Constants.GRAPH_DIR + deviceName + "/model");
-////        graph.print();
-//
-        new Thread(new CheckDataPhase(deviceName)).start();
+//        Thread buildGraphThread = new Thread(new BuildGraphPhase(deviceName, graph));
+//        buildGraphThread.start();
+//        buildGraphThread.join();
+//////        graph = FileUtils.readFromFile(Constants.GRAPH_DIR + deviceName + "/model");
+//////        graph.print();
+////
+//        new Thread(new CheckDataPhase(deviceName)).start();
 
 //        new Thread(new CallServiceThread(deviceName)).start();
 //        new Thread(new GetAttributeThread(deviceName, graph)).start();
@@ -49,6 +48,5 @@ public class Test {
 
     public static void init() {
         ServiceName.init();
-        AttributesName.init();
     }
 }

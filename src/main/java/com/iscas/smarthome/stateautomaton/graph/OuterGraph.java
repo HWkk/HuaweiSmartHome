@@ -79,30 +79,36 @@ public class OuterGraph implements Graph {
         return preState.getUncalled();
     }
 
-//    public void processData(Data data) {
-//        String mode = data.getMode();
-//        Attribute attribute = data.getAttribute();
-//        if(!ModeMap.containsState(mode)) {
-//            ModeMap.addState(mode, deviceName);
-//            addState(ModeMap.getState(mode));
-//        }
-//
-//        OuterState state = ModeMap.getState(mode);
-//        if(state == preState) {
-//            time += Constants.GET_ATTRIBUTE_TIME_GAP;
-//        } else {
-//            if(preState != null) {
-//                Edge edge = new Edge(preState, state, ServiceName.preService);
-//                addEdge(edge);
-//                preState.leaveState(time);
-//            }
-//            time = 0;
-//        }
-//        state.addInnerState(new InnerState(time, attribute), deviceName);
-//        preState = state;
-//    }
+    /**
+     * 相对时间记录方式
+     */
+    public void processDataByRelativeTime(Data data) {
+        String mode = data.getMode();
+        Attribute attribute = data.getAttribute();
+        if(!ModeMap.containsState(mode)) {
+            ModeMap.addState(mode, deviceName);
+            addState(ModeMap.getState(mode));
+        }
 
-    public void processData(Data data) {
+        OuterState state = ModeMap.getState(mode);
+        if(state == preState) {
+            time += Constants.GET_ATTRIBUTE_TIME_GAP;
+        } else {
+            if(preState != null) {
+                Edge edge = new Edge(preState, state, ServiceName.preService);
+                addEdge(edge);
+                preState.leaveState(time);
+            }
+            time = 0;
+        }
+        state.addInnerState(new InnerState(time, attribute), deviceName);
+        preState = state;
+    }
+
+    /**
+     * 绝对时间记录方式
+     */
+    public void processDataByAbsoluteTime(Data data) {
         String mode = data.getMode();
         Attribute attribute = data.getAttribute();
         if(!ModeMap.containsState(mode)) {
@@ -149,7 +155,7 @@ public class OuterGraph implements Graph {
         }
     }
 
-    public void toGraph() {
+    public String toGraph() {
         GraphViz graph = new GraphViz(Constants.GRAPH_DIR + deviceName + "/graph/", DateUtils.getDate());
         graph.startGraph();
 
@@ -181,7 +187,7 @@ public class OuterGraph implements Graph {
             graph.addln();
         }
         graph.endGraph();
-        graph.run();
+        return graph.run();
     }
 
     public boolean hasFinishedTest(String deviceName) {

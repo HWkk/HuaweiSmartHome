@@ -17,23 +17,30 @@ public class GraphViz{
         this.date = date;
     }
 
-    public void run() {
+    /**
+     * @return 图片生成后的位置
+     */
+    public String run() {
         File file = new File(dir + "txt/" + date + ".txt");
         writeGraphToFile(graph.toString(), dir + "txt/" + date + ".txt");
-        creatBash();
+        String res = creatBash();
         try {
-            runtime.exec(bash);
+            runtime.exec(bash).waitFor();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+        return res;
     }
 
-    public void creatBash(){
+    public String creatBash(){
         bash += "dot " + dir + "txt/" + date + ".txt ";
         bash += "-T png ";
         bash += "-o ";
         bash += dir + "png/" + date + ".png";
         System.out.println(bash);
+        return dir + "png/" + date + ".png";
     }
 
     public void writeGraphToFile(String dotcode, String filename) {

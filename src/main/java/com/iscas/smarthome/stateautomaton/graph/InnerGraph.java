@@ -21,17 +21,23 @@ public class InnerGraph implements Graph {
         totalLeaveCount = 0;
     }
 
-//    public void addInnerState(InnerState state) {
-//        int index = state.getTime() / Constants.GET_ATTRIBUTE_TIME_GAP;
-//        if(index >= states.size()) {
-//            states.add(state);
-//            leaveCounts.add(0);
-//        } else {
-//            states.get(index).mergeWithAttribute(state, Constants.DECAY_FACTOR);
-//        }
-//    }
+    /**
+     * 相对时间记录方式
+     */
+    public void addInnerStateByRelativeTime(InnerState state) {
+        int index = state.getTime() / Constants.GET_ATTRIBUTE_TIME_GAP;
+        if(index >= states.size()) {
+            states.add(state);
+            leaveCounts.add(0);
+        } else {
+            states.get(index).mergeWithAttribute(state, Constants.DECAY_FACTOR);
+        }
+    }
 
-    public void addInnerState(InnerState state) {
+    /**
+     * 绝对时间记录方式
+     */
+    public void addInnerStateByAbsoluteTime(InnerState state) {
         states.add(state);
     }
 

@@ -1,7 +1,7 @@
 
 <template>
     <div id="list">
-        <!-- p id="demo">我的第一个段落</p -->
+        <p id="demo">我的第一个段落</p>
         <vue-headful title="智能家居" />
 
         <el-input v-model="entityName" placeholder="请输入设备名称"></el-input>
@@ -16,7 +16,7 @@
         <img id="modelPng" src="" height="300" width="500">
 
         <p></p>
-        <el-button type="primary" @click="checkData()">开始异常检测</el-button>
+        <el-button type="primary" @click="checkData()">开启模型应用功能</el-button>
     </div>
 </template>
 <script>
@@ -67,8 +67,6 @@ export default {
             document.getElementById('buildProcess').innerHTML = '建模中,模型实时变化图如下:';
             axios.get(this.GLOBAL.configip + 'buildModel?checkList=' + _this.checkList)
                 .then(function(response) {
-                    //document.getElementById('buildProcess').innerHTML = '建模完成,模型展示如下:';
-                    //document.getElementById('modelPng').src = response.data;
                 });
         },
 
@@ -95,9 +93,14 @@ export default {
             console.log("WebSocket连接发生错误");
         },
 
-        websocketonmessage: function (e) {
-           console.log(e.data);
-           document.getElementById('modelPng').src = e.data;
+        websocketonmessage: function (message) {
+            console.log(message.data);
+            document.getElementById('demo').innerHTML = message.data;
+            if(message.data == 'FinishModel') {
+                document.getElementById('buildProcess').innerHTML = '建模完成,模型展示如下:';
+            } else {
+                document.getElementById('modelPng').src = message.data;
+            }
         },
 
         websocketclose: function (e) {
