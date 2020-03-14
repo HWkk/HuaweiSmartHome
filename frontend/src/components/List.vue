@@ -2,7 +2,7 @@
 <template>
     <div id="list">
         <!-- p id="demo">我的第一个段落</p-->
-        <vue-headful title="智能家居" />
+        <vue-headful title="智能家居建模与应用系统" />
 
         <el-input v-model="entityName" placeholder="请输入设备名称"></el-input>
         <el-button type="primary" @click="getAttributes()">获取过滤后的设备属性</el-button>
@@ -10,13 +10,20 @@
         <el-checkbox-group v-model="checkList">
             <el-checkbox v-for="attr in attributes" :label="attr"></el-checkbox>
         </el-checkbox-group>
-        <el-button type="primary" @click="buildModel()" v-if="showBuildModelButton" >开始构建模型</el-button>
+        <el-button type="primary" @click="buildModel()" v-if="showBuildModelButton">开始构建模型</el-button>
 
         <p id="buildProcess"></p>
         <img id="modelPng" src="" height="300" width="500" v-if="showModelPng">
 
         <p></p>
-        <el-button type="primary" @click="checkData()" v-if="showUseModelButton" >开启模型应用功能</el-button>
+        <el-button type="primary" @click="showRelation()" v-if="showUseModelButton">开启模型应用功能</el-button>
+
+        <p id="relationText"></p>
+        <div v-for="(attr, index) in filterAttributes" v-if="showConfirmButton">
+            <p>{{ attr }}:</p>
+            <el-input v-model="relationList[index]" placeholder="请输入可能有关系的设备硬件"></el-input>
+        </div>
+        <el-button type="primary" @click="putRelationAndStart()" v-if="showConfirmButton">确定</el-button>
     </div>
 </template>
 <script>
@@ -32,7 +39,10 @@ export default {
             checkList:[],
             showBuildModelButton:false,
             showModelPng:false,
-            showUseModelButton:false
+            showUseModelButton:false,
+            filterAttributes:[],
+            relationList:[],
+            showConfirmButton:false
         }
     },
 
@@ -74,8 +84,20 @@ export default {
                 });
         },
 
-        checkData() {
-            axios.get(this.GLOBAL.configip + 'checkData')
+        showRelation() {
+            var _this = this;
+            axios.get(this.GLOBAL.configip + 'getFilterAttributes?entityName=' + _this.entityName)
+                .then(function(response) {
+                    _this.filterAttributes = response.data.split(",");
+                    document.getElementById('relationText').innerHTML = '请输入可能与对应属性有关的设备硬件:';
+                    _this.showConfirmButton = true;
+                });
+        },
+
+        putRelationAndStart() {
+            var _this = this;
+            console.log(_this.relationList);
+            axios.get(this.GLOBAL.configip + 'putRelationAndStart?relationList=' + _this.relationList)
                 .then(function(response) {
 
                 });
@@ -106,7 +128,7 @@ export default {
                 _this.showUseModelButton = true;
             } else {
                 if(!_this.showModelPng)
-                    _this.showModelPng= true;
+                    _this.showModelPng = true;
                 document.getElementById('modelPng').src = message.data;
             }
         },
