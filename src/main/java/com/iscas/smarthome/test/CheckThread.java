@@ -1,6 +1,5 @@
 package com.iscas.smarthome.test;
 
-import com.iscas.smarthome.specification.ModeMap;
 import com.iscas.smarthome.stateautomaton.attribute.Attribute;
 import com.iscas.smarthome.stateautomaton.graph.OuterGraph;
 import com.iscas.smarthome.utils.Constants;
@@ -26,7 +25,7 @@ public class CheckThread implements Runnable{
             Timer.waitTimeGap(Constants.CHECK_TIME_GAP);
             synchronized (checkData) {
                 for(Map.Entry<String, List<Attribute>> entry : checkData.entrySet()) {
-                    graph.checkData(ModeMap.getState(entry.getKey()), entry.getValue());
+//                    graph.checkData(ModeMap.getState(entry.getKey()), entry.getValue());
                 }
             }
         }

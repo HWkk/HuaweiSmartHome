@@ -2,6 +2,7 @@ package com.iscas.smarthome.stateautomaton.graph;
 
 import com.iscas.smarthome.data.Data;
 import com.iscas.smarthome.graphviz.GraphViz;
+import com.iscas.smarthome.homeassistant.AttributesName;
 import com.iscas.smarthome.homeassistant.ServiceName;
 import com.iscas.smarthome.specification.ModeMap;
 import com.iscas.smarthome.specification.OuterEvent;
@@ -10,6 +11,7 @@ import com.iscas.smarthome.stateautomaton.state.InnerState;
 import com.iscas.smarthome.stateautomaton.state.OuterState;
 import com.iscas.smarthome.utils.Constants;
 import com.iscas.smarthome.utils.DateUtils;
+import com.iscas.smarthome.websocket.CustomWebSocket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,9 +145,16 @@ public class OuterGraph implements Graph {
 //        }
 //    }
 
-    public void checkData(OuterState state, List<Attribute> data) {
-        if(state.checkNormal(data, deviceName))
+    public void checkData(OuterState state, List<Attribute> data, CustomWebSocket webSocket) {
+        int checkNormalRes = state.checkNormal(data);
+        if(checkNormalRes == -1)
             System.out.println("Current state is normal.");
+        else {
+            String message = AttributesName.getAttributes(deviceName).get(checkNormalRes);
+            message += " 属性异常, 有可能的原因是";
+            message += state.findAbnormalReason(checkNormalRes, state.findCorrespondInner(data.size() - 1), deviceName);
+            webSocket.sendAllMessage("E:" + message);
+        }
     }
 
     public void print() {

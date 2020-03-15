@@ -20,6 +20,7 @@ public class CheckDataPhase implements Runnable{
     OuterGraph graph;
     HashMap<String, List<Attribute>> checkData; //key为模式，value为当前模式下的收集的取值
     CustomWebSocket webSocket;
+    int step = 0;
 
     public CheckDataPhase(String deviceName) {
         this.deviceName = deviceName;
@@ -59,20 +60,23 @@ public class CheckDataPhase implements Runnable{
 
             while((System.currentTimeMillis() - start) / 1000 < nextServiceCallGap) {
                 Data data = Caller.getAttribute(deviceName);
+                step++;
 
                 //在CheckThread里要读checkData，在此处要写checkData，需要加锁
                 //TODO: 需要检测正确性
 //                synchronized (checkData) {
                 checkData.get(data.getMode()).add(data.getAttribute());
 //                }
+                if(step % Constants.CHECK_STEP_GAP == 0) {
+                    graph.checkData(ModeMap.getState(data.getMode()), checkData.get(data.getMode()), webSocket);
 
-                StringBuilder message = new StringBuilder("C:");
-                HashMap<String, List<String>> locations = DataUtils.getAllModeAttrFigure(checkData, deviceName);
-                for(Map.Entry<String, List<String>> entry : locations.entrySet())
-                    message.append(entry.getKey() + entry.getValue().toString() + "+");
-                message.deleteCharAt(message.length() - 1);
-
-                webSocket.sendAllMessage(message.toString());
+                    StringBuilder message = new StringBuilder("C:");
+                    HashMap<String, List<String>> locations = DataUtils.getAllModeAttrFigure(checkData, deviceName);
+                    for (Map.Entry<String, List<String>> entry : locations.entrySet())
+                        message.append(entry.getKey() + entry.getValue().toString() + "+");
+                    message.deleteCharAt(message.length() - 1);
+                    webSocket.sendAllMessage(message.toString());
+                }
                 Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);
             }
         }

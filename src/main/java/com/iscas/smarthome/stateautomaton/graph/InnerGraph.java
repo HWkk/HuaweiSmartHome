@@ -84,6 +84,7 @@ public class InnerGraph implements Graph {
     }
 
     public InnerState getState(int index) {
+        if(index >= states.size()) return states.get(states.size() - 1);
         return states.get(index);
     }
 

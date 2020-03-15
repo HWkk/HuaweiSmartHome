@@ -17,6 +17,10 @@ public class Attribute implements Serializable {
         this.attributes = attributes;
     }
 
+    public Attribute(int dimension) {
+        attributes = new double[dimension];
+    }
+
     public double getAttribute(int index) {
         return index >= attributes.length || index < 0 ? 0.0 : attributes[index];
     }

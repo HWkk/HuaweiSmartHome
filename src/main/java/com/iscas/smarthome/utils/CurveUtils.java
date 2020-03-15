@@ -20,6 +20,8 @@ public class CurveUtils {
     }
 
     public static IQR calValueIQR(List<Double> data) {
+        if(data.size() == 0) return new IQR(0.0, 0.0);
+        if(data.size() == 1) return new IQR(data.get(0), data.get(0));
         List<Double> temp = new ArrayList<>();
         for(double d : data)
             temp.add(d);
@@ -44,6 +46,8 @@ public class CurveUtils {
     }
 
     public static double calValueMedian(List<Double> data) {
+        if(data.size() == 0) return 0.0;
+        if(data.size() == 1) return data.get(0);
         List<Double> temp = new ArrayList<>();
         for(double d : data)
             temp.add(d);
@@ -53,7 +57,7 @@ public class CurveUtils {
 
     public static double calSlopeMedian(List<Double> data) {
         List<Double> slopes = new ArrayList<>();
-        for(int i = 1; i < data.size(); i++)
+        for (int i = 1; i < data.size(); i++)
             slopes.add(Math.abs(data.get(i) - data.get(i - 1)));
         return calValueMedian(slopes);
     }

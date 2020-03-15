@@ -17,4 +17,8 @@ public class AttrAndHardRelation {
     public static String print() {
         return relation.toString();
     }
+
+    public static boolean containsAttribute(String attributeName) {
+        return relation.containsKey(attributeName);
+    }
 }
