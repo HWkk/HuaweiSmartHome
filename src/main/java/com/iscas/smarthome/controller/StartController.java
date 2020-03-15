@@ -2,7 +2,10 @@ package com.iscas.smarthome.controller;
 
 import com.iscas.smarthome.homeassistant.AttrAndHardRelation;
 import com.iscas.smarthome.homeassistant.AttributesName;
+import com.iscas.smarthome.homeassistant.Caller;
 import com.iscas.smarthome.stateautomaton.graph.OuterGraph;
+import com.iscas.smarthome.test.BuildGraphPhase;
+import com.iscas.smarthome.test.CheckDataPhase;
 import com.iscas.smarthome.websocket.CustomWebSocket;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -48,28 +51,28 @@ public class StartController {
             list.add(s.trim());
         AttributesName.addEntity(entityName, list);
 
-//        this.graph = Caller.init(entityName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
-//        Thread buildGraphThread = new Thread(new BuildGraphPhase(entityName, graph, webSocket));
-//        buildGraphThread.start();
+        this.graph = Caller.init(entityName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
+        Thread buildGraphThread = new Thread(new BuildGraphPhase(entityName, graph, webSocket));
+        buildGraphThread.start();
+        try {
+            buildGraphThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+//        //TODO: 信息还要加以区分，区分成建模的信息还是异常检测的信息
+//        webSocket.sendAllMessage("/img/1.png");
 //        try {
-//            buildGraphThread.join();
+//            Thread.sleep(1000);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-        //TODO: 信息还要加以区分，区分成建模的信息还是异常检测的信息
-        webSocket.sendAllMessage("/img/1.png");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        webSocket.sendAllMessage("/img/2.png");
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        webSocket.sendAllMessage("FinishModel");
+//        webSocket.sendAllMessage("/img/2.png");
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        webSocket.sendAllMessage("FinishModel");
     }
 
     @RequestMapping("/getFilterAttributes")
@@ -94,6 +97,6 @@ public class StartController {
         System.out.println(AttrAndHardRelation.print());
 
         //TODO: 检测过程中实时发送异常信息
-//        new Thread(new CheckDataPhase(entityName)).start();
+        new Thread(new CheckDataPhase(entityName, graph, webSocket)).start();
     }
 }

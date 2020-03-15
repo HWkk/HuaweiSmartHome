@@ -25,9 +25,9 @@ public class BuildGraphPhase implements Runnable{
 
     @Override
     public void run() {
-//        int i = 0;
-        while(!graph.hasFinishedTest(deviceName)) {
-//        while(i++ < 3) {
+        int i = 0;
+//        while(!graph.hasFinishedTest(deviceName)) {
+        while(i++ < 4) {
             Caller.callService(deviceName, graph);
             long start = System.currentTimeMillis();
             Timer.waitTimeGap(Constants.GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP);
@@ -48,12 +48,12 @@ public class BuildGraphPhase implements Runnable{
                 String fileLoc = graph.toGraph();
                 String fileName = fileLoc.substring(fileLoc.lastIndexOf("/") + 1);
                 FileUtils.copyFile(fileLoc, Constants.MODEL_PNG_DIR + deviceName + "/", fileName);
-                webSocket.sendAllMessage("/img/" + deviceName + "/" + fileName);
+                webSocket.sendAllMessage("M:/img/model/" + deviceName + "/" + fileName);
                 Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);
             }
         }
         System.out.println("Test Finished. Model Completed.");
-        webSocket.sendAllMessage("FinishModel");
+        webSocket.sendAllMessage("M:FinishModel");
         FileUtils.saveToFile(Constants.GRAPH_DIR + deviceName + "/model1", graph);
         FileUtils.saveToFile(Constants.GRAPH_DIR + deviceName + "/modeMap1", ModeMap.getMap());
     }

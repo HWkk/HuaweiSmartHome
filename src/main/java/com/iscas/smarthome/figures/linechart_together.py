@@ -29,11 +29,11 @@ def draw_linechart(x_name, x_values, y_name, y_legends, y_values, save_file):
     for i in range(len(y_legends)):
         x_values[i] = [int(e) for e in x_values[i]]
 
-        y_min = min(y_min, min(y_values[i]))
-        y_max = max(y_max, max(y_values[i]))
-
-        if y_max - y_min <= 70:
-            plt.ylim(y_min - 10, y_min + 70)
+#         y_min = min(y_min, min(y_values[i]))
+#         y_max = max(y_max, max(y_values[i]))
+#
+#         if y_max - y_min <= 70:
+#             plt.ylim(y_min - 10, y_min + 70)
         plt.plot(x_values[i], y_values[i])
 
     # y_major_locator = MultipleLocator(50)
@@ -49,22 +49,22 @@ def draw_linechart(x_name, x_values, y_name, y_legends, y_values, save_file):
 def main():
 
     x_name = sys.argv[1]
-    print x_name
+#     print x_name
 
     x_values = eval(sys.argv[2])
-    print x_values
+#     print x_values
 
     y_legends = sys.argv[3].split(",")
-    print y_legends
+#     print y_legends
 
     y_name = sys.argv[4]
-    print y_name
+#     print y_name
 
     y_values = eval(sys.argv[5])
-    print y_values
+#     print y_values
 
     save_file = sys.argv[6]
-    print save_file
+#     print save_file
 
     draw_linechart(x_name, x_values, y_name, y_legends, y_values, save_file)
 

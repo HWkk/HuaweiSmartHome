@@ -51,7 +51,7 @@ public class PythonFigureUtils {
 
         String[] args = new String[8];
         args[0] = "python";
-        args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/figures/linechart_single.py";
+        args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/figures/linechart_single.py";
         args[2] = "time(s)";
 
         String[] times = new String[data.size()];
@@ -69,7 +69,7 @@ public class PythonFigureUtils {
             }
             args[6] = Arrays.toString(values);
             args[6] = args[6].substring(1, args[6].length() - 1);
-            args[7] = saveFile + "_" + attrNames.get(i) + ".pdf";
+            args[7] = saveFile + "_" + attrNames.get(i) + ".png";
             Process proc = null;
             try {
                 proc = Runtime.getRuntime().exec(args);
@@ -94,7 +94,7 @@ public class PythonFigureUtils {
 
         String[] args = new String[8];
         args[0] = "python";
-        args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/figures/linechart_together.py";
+        args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/figures/linechart_together.py";
         args[2] = "time(s)";
 
         List<List<String>> times = new ArrayList<>();
@@ -118,7 +118,7 @@ public class PythonFigureUtils {
                 values.add(v);
             }
             args[6] = values.toString();
-            args[7] = saveFile + "_" + attrNames.get(i) + ".pdf";
+            args[7] = saveFile + "_" + attrNames.get(i) + ".png";
 
             Process proc = null;
             try {

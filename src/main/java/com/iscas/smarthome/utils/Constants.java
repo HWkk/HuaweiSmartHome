@@ -38,5 +38,8 @@ public class Constants {
     public static int CHECK_TIME_GAP = 50;
 
     //用于展示的模型图片目录
-    public static String MODEL_PNG_DIR = "/Users/kk/Repositories/HuaweiSmartHome/frontend/public/img/";
+    public static String MODEL_PNG_DIR = "/Users/kk/Repositories/HuaweiSmartHome/frontend/public/img/model/";
+
+    //用于展示的属性图片目录
+    public static String ATTRIBUTE_PNG_DIR = "/Users/kk/Repositories/HuaweiSmartHome/frontend/public/img/attribute/";
 }

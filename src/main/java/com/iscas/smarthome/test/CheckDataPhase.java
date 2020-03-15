@@ -1,5 +1,6 @@
 package com.iscas.smarthome.test;
 
+import com.iscas.smarthome.checkphase.DataUtils;
 import com.iscas.smarthome.data.Data;
 import com.iscas.smarthome.homeassistant.Caller;
 import com.iscas.smarthome.specification.ModeMap;
@@ -9,17 +10,16 @@ import com.iscas.smarthome.stateautomaton.state.OuterState;
 import com.iscas.smarthome.utils.Constants;
 import com.iscas.smarthome.utils.FileUtils;
 import com.iscas.smarthome.utils.Timer;
+import com.iscas.smarthome.websocket.CustomWebSocket;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class CheckDataPhase implements Runnable{
 
     String deviceName;
     OuterGraph graph;
     HashMap<String, List<Attribute>> checkData; //key为模式，value为当前模式下的收集的取值
+    CustomWebSocket webSocket;
 
     public CheckDataPhase(String deviceName) {
         this.deviceName = deviceName;
@@ -30,6 +30,17 @@ public class CheckDataPhase implements Runnable{
         for(String mode : ModeMap.getMap().keySet())
             checkData.put(mode, new ArrayList<Attribute>());
         new Thread(new CheckThread(graph, checkData)).start();
+    }
+
+    public CheckDataPhase(String deviceName, OuterGraph graph, CustomWebSocket webSocket) {
+        this.deviceName = deviceName;
+        this.graph = graph;
+
+        checkData = new HashMap<>();
+        for(String mode : ModeMap.getMap().keySet())
+            checkData.put(mode, new ArrayList<Attribute>());
+        this.webSocket = webSocket;
+//        new Thread(new CheckThread(graph, checkData)).start();
     }
 
     @Override
@@ -51,9 +62,17 @@ public class CheckDataPhase implements Runnable{
 
                 //在CheckThread里要读checkData，在此处要写checkData，需要加锁
                 //TODO: 需要检测正确性
-                synchronized (checkData) {
-                    checkData.get(data.getMode()).add(data.getAttribute());
-                }
+//                synchronized (checkData) {
+                checkData.get(data.getMode()).add(data.getAttribute());
+//                }
+
+                StringBuilder message = new StringBuilder("C:");
+                HashMap<String, List<String>> locations = DataUtils.getAllModeAttrFigure(checkData, deviceName);
+                for(Map.Entry<String, List<String>> entry : locations.entrySet())
+                    message.append(entry.getKey() + entry.getValue().toString() + "+");
+                message.deleteCharAt(message.length() - 1);
+
+                webSocket.sendAllMessage(message.toString());
                 Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);
             }
         }

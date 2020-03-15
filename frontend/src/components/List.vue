@@ -1,7 +1,7 @@
 
 <template>
     <div id="list">
-        <!-- p id="demo">我的第一个段落</p-->
+        <!--p id="demo">我的第一个段落</p-->
         <vue-headful title="智能家居建模与应用系统" />
 
         <el-input v-model="entityName" placeholder="请输入设备名称"></el-input>
@@ -13,7 +13,7 @@
         <el-button type="primary" @click="buildModel()" v-if="showBuildModelButton">开始构建模型</el-button>
 
         <p id="buildProcess"></p>
-        <img id="modelPng" src="" height="300" width="500" v-if="showModelPng">
+        <img id="modelPng" src="" height="300" v-if="showModelPng">
 
         <p></p>
         <el-button type="primary" @click="showRelation()" v-if="showUseModelButton">开启模型应用功能</el-button>
@@ -24,6 +24,14 @@
             <el-input v-model="relationList[index]" placeholder="请输入可能有关系的设备硬件"></el-input>
         </div>
         <el-button type="primary" @click="putRelationAndStart()" v-if="showConfirmButton">确定</el-button>
+
+        <p id="attrPngText"></p>
+        <div v-for="modeAndAttr in modeAttrPngLoc" v-if="showAttrPng">
+            <p>{{ modeAndAttr.mode }}模式的属性图:</p>
+            <div v-for="pngLoc in modeAndAttr.attr" style="display:inline;">
+                <img :src="pngLoc" height="250">
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -42,7 +50,9 @@ export default {
             showUseModelButton:false,
             filterAttributes:[],
             relationList:[],
-            showConfirmButton:false
+            showConfirmButton:false,
+            modeAttrPngLoc:[],
+            showAttrPng:false
         }
     },
 
@@ -97,6 +107,8 @@ export default {
         putRelationAndStart() {
             var _this = this;
             console.log(_this.relationList);
+            document.getElementById('attrPngText').innerHTML = '分模式对属性数据进行展示:';
+            this.showAttrPng = true;
             axios.get(this.GLOBAL.configip + 'putRelationAndStart?relationList=' + _this.relationList)
                 .then(function(response) {
 
@@ -123,13 +135,29 @@ export default {
             console.log(message.data);
             var _this = this;
             //document.getElementById('demo').innerHTML = message.data;
-            if(message.data == 'FinishModel') {
-                document.getElementById('buildProcess').innerHTML = '建模完成,模型展示如下:';
-                _this.showUseModelButton = true;
+            if(message.data.startsWith('M:')) {
+                var m = message.data.substring(2);
+                if(m == 'FinishModel') {
+                    document.getElementById('buildProcess').innerHTML = '建模完成,模型展示如下:';
+                    _this.showUseModelButton = true;
+                } else {
+                    if(!_this.showModelPng)
+                        _this.showModelPng = true;
+                    document.getElementById('modelPng').src = m;
+                }
             } else {
-                if(!_this.showModelPng)
-                    _this.showModelPng = true;
-                document.getElementById('modelPng').src = message.data;
+                var m = message.data.substring(2);
+                _this.modeAttrPngLoc = [];
+                var splitMode = m.split("+");
+                for(var i=0; i<splitMode.length; i++) {
+                    var split = splitMode[i].split("[");
+                    var modeAndAttr = {};
+                    modeAndAttr.mode = split[0];
+                    split[1] = split[1].substring(0, split[1].length - 1);
+                    modeAndAttr.attr = split[1].split(",");
+                    _this.modeAttrPngLoc.push(modeAndAttr);
+                }
+                console.log(_this.modeAttrPngLoc);
             }
         },
 
