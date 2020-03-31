@@ -70,7 +70,31 @@ public class GraphViz{
     }
 
     public void addLabel(String label) {
-        graph.append("[label=\"" + label + "\"]");
+        graph.append("label=\"" + label + "\"");
+    }
+
+    public void addShape(String shape) {
+        graph.append("shape=" + shape);
+    }
+
+    public void addColor(String color) {
+        graph.append("color=" + color);
+    }
+
+    public void dottedLine() {
+        graph.append("style=dotted");
+    }
+
+    public void startLabel() {
+        graph.append("[");
+    }
+
+    public void endLabel() {
+        graph.append("]");
+    }
+
+    public void addComma() {
+        graph.append(", ");
     }
 
     public void addSpace() {

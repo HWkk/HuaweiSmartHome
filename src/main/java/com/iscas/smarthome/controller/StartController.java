@@ -22,9 +22,9 @@ public class StartController {
 
     OuterGraph graph;
     String entityName;
-    int getAttrTimeGap = 2;
-    int callServiceTimeGap = 20;
-    int getAttrAfterCallingTimeGap = 10;
+    int getAttrTimeGap = 5;
+    int callServiceTimeGap = 90;
+    int getAttrAfterCallingTimeGap = 1;
 
     @Autowired
     private CustomWebSocket webSocket;
@@ -49,6 +49,7 @@ public class StartController {
         List<String> list = new ArrayList<>();
         for(String s : strs)
             list.add(s.trim());
+        AttributesName.init();
         AttributesName.addEntity(entityName, list);
 
         this.graph = Caller.init(entityName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
@@ -59,7 +60,6 @@ public class StartController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        //TODO: 信息还要加以区分，区分成建模的信息还是异常检测的信息
 //        webSocket.sendAllMessage("/img/1.png");
 //        try {
 //            Thread.sleep(1000);
@@ -96,7 +96,7 @@ public class StartController {
         }
         System.out.println(AttrAndHardRelation.print());
 
-        //TODO: 检测过程中实时发送异常信息
+        //TODO: 实时更新
         new Thread(new CheckDataPhase(entityName, graph, webSocket)).start();
     }
 }

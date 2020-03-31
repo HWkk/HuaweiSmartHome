@@ -172,7 +172,9 @@ public class OuterGraph implements Graph {
             for(Map.Entry<OuterState, Edge> entry : state.getOutNeighbors().entrySet()) {
                 graph.add(state.getName() + "->" + entry.getKey().getName());
                 String percent = String.format("%.1f", entry.getKey().getInNeighborPercent(state) * 100.0);
+                graph.startLabel();
                 graph.addLabel(entry.getValue().getEvent() + "(" + percent + "%)");
+                graph.endLabel();
                 graph.addln();
             }
 
@@ -182,17 +184,26 @@ public class OuterGraph implements Graph {
             for(int i = 0; i < state.getInnerGraph().getStateSize(); i++) {
                 graph.add(state.getName() + Integer.toString(i));
                 String percent = String.format("%.1f", state.getInnerGraph().getLeavePercent(i) * 100.0);
+                graph.startLabel();
                 graph.addLabel(state.getInnerGraph().getState(i).getAttribute().toString() + "(" + percent + "%)");
+                graph.addComma();
+                graph.addShape("box");
+                graph.endLabel();
                 graph.addln();
                 if(i != 0) {
                     graph.add(state.getName() + Integer.toString(i - 1) + "->" + state.getName() + Integer.toString(i));
+                    graph.startLabel();
                     graph.addLabel(Constants.GET_ATTRIBUTE_TIME_GAP + "s");
+                    graph.endLabel();
                     graph.addln();
                 }
             }
             graph.endGraph();
             graph.addln();
             graph.add(state.getName() + "->" + state.getName() + "0");
+            graph.startLabel();
+            graph.dottedLine();
+            graph.endLabel();
             graph.addln();
         }
         graph.endGraph();

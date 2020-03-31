@@ -26,9 +26,9 @@ public class BuildGraphPhase implements Runnable{
     @Override
     public void run() {
         int i = 0;
-//        while(!graph.hasFinishedTest(deviceName)) {
-        while(i++ < 4) {
-            Caller.callService(deviceName, graph);
+        while(!graph.hasFinishedTest(deviceName)) {
+//        while(i++ < 4) {
+//            Caller.callService(deviceName, graph);
             long start = System.currentTimeMillis();
             Timer.waitTimeGap(Constants.GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP);
             System.out.println("wait " + (System.currentTimeMillis() - start) + "ms to get attr");
@@ -36,9 +36,10 @@ public class BuildGraphPhase implements Runnable{
 
             // 下次调用服务的时间间隔
             // 下限为：获取一次属性之后；上限为：nextServiceCallGap。
-            int lowerBound = Constants.GET_ATTRIBUTE_TIME_GAP + Constants.GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP;
+            int lowerBound = 2 * Constants.GET_ATTRIBUTE_TIME_GAP + Constants.GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP;
             int upperBound = Constants.CALL_SERVICE_TIME_GAP;
             int nextServiceCallGap = new Random().nextInt(upperBound - lowerBound) + lowerBound;
+//            int nextServiceCallGap = Constants.CALL_SERVICE_TIME_GAP;
 
             while((System.currentTimeMillis() - start) / 1000 < nextServiceCallGap) {
                 Data data = Caller.getAttribute(deviceName);

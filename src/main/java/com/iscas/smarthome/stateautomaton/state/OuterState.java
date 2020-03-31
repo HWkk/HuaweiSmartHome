@@ -1,6 +1,5 @@
 package com.iscas.smarthome.stateautomaton.state;
 
-import com.iscas.smarthome.data.CurveStatistics;
 import com.iscas.smarthome.homeassistant.AttrAndHardRelation;
 import com.iscas.smarthome.homeassistant.AttributesName;
 import com.iscas.smarthome.homeassistant.ServiceName;
@@ -102,18 +101,41 @@ public class OuterState implements State, Externalizable {
 //        return normal;
 //    }
 
-    public int isCurveSimilar(List<Attribute> data) {
-        if(innerGraph.getStateSize() == 0) return -1;
-        List<CurveStatistics> normalStatistics = innerGraph.getCurveStatistics();
+//    public int isCurveSimilar(List<Attribute> data) {
+//        if(innerGraph.getStateSize() == 0) return -1;
+//        List<CurveStatistics> normalStatistics = innerGraph.getCurveStatistics();
+//
+//        for(int i = 0; i < normalStatistics.size(); i++) {
+//            List<Double> curAttr = new ArrayList<>();
+//            for(Attribute attribute : data)
+//                curAttr.add(attribute.getAttribute(i));
+//            double valueMedian = CurveUtils.calValueMedian(curAttr), slopeMedian = CurveUtils.calSlopeMedian(curAttr);
+//            if(normalStatistics.get(i).getSlopeIQR().isOutlier(slopeMedian) || normalStatistics.get(i).getValueIQR().isOutlier(valueMedian)) {
+//                return i;
+//            }
+//        }
+//        return -1;
+//    }
 
-        for(int i = 0; i < normalStatistics.size(); i++) {
+    public int isCurveSimilar(List<Attribute> data) {
+        if(innerGraph.getStateSize() == 0 || data.size() == 0) return -1;
+        List<Attribute> normalAttributes = new ArrayList<>();
+        for(int i = 0; i < innerGraph.getStateSize(); i++)
+            normalAttributes.add(innerGraph.getState(i).getAttribute());
+
+        for(int i = 0; i < data.get(0).getDimension(); i++) {
             List<Double> curAttr = new ArrayList<>();
             for(Attribute attribute : data)
                 curAttr.add(attribute.getAttribute(i));
-            double valueMedian = CurveUtils.calValueMedian(curAttr), slopeMedian = CurveUtils.calSlopeMedian(curAttr);
-            if(normalStatistics.get(i).getSlopeIQR().isOutlier(slopeMedian) || normalStatistics.get(i).getValueIQR().isOutlier(valueMedian)) {
+
+            List<Double> normalAttr = new ArrayList<>();
+            for(Attribute attribute : normalAttributes)
+                normalAttr.add(attribute.getAttribute(i));
+
+            double valueSim = CurveUtils.getValueSimilarity(curAttr, normalAttr);
+            double slopeSim = CurveUtils.getSlopeSimilarity(curAttr, normalAttr);
+            if(valueSim < Constants.VALUE_THRESHOLD || slopeSim < Constants.SLOPE_THRESHOLD)
                 return i;
-            }
         }
         return -1;
     }
@@ -165,21 +187,21 @@ public class OuterState implements State, Externalizable {
         int index = state.getTime() / curOuter.getInnerGraph().getStateSize();
         if(index >= curOuter.getInnerGraph().getStateSize())
             index = curOuter.getInnerGraph().getStateSize() - 1;
-        double maxInfluence = 0.0;
+        index--;
+        double maxInfluence = Double.MIN_VALUE;
         String event = "";
 
         for(int i = 0; i < Constants.BACK_COUNT; i++) {
             String curEvent = "";
-            if(index == 0) {
-                pre = curInnerState;
+            pre = curInnerState;
+            if(index < 0) {
                 OuterState newOuter = curOuter.findMaxPreOuter();
                 index = newOuter.findMaxInner();
-                curInnerState = newOuter.getInnerGraph().getState(index);
+                curInnerState = newOuter.getInnerGraph().getState(index--);
                 curEvent = "操作 " + newOuter.getOutNeighbors().get(curOuter).getEvent() + "异常";
                 curOuter = newOuter;
             } else {
-                pre = curInnerState;
-                curInnerState = curOuter.getInnerGraph().getState(--index);
+                curInnerState = curOuter.getInnerGraph().getState(index--);
                 curEvent = "工作时间太长或者环境突变";
             }
             double influence = Math.abs(pre.getAttribute().getAttribute(attrIndex) - curInnerState.getAttribute().getAttribute(attrIndex));

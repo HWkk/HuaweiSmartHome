@@ -23,7 +23,7 @@ public class AttributesName {
         attributesName.get(EntityName.AIR_PURIFIER_NAME).add("motor_speed");
         attributesName.get(EntityName.AIR_PURIFIER_NAME).add("average_aqi");
         attributesName.get(EntityName.AIR_PURIFIER_NAME).add("purify_volume");
-
+        attributesName.get(EntityName.AIR_PURIFIER_NAME).add("filter_hours_used");
 
         //加湿器
         modeAttribute.put(EntityName.AIR_HUMIDIFIER_NAME, "mode");
@@ -48,7 +48,7 @@ public class AttributesName {
 
     public static void addEntity(String entityName, List<String> attributes) {
         modeAttribute.put(entityName, "mode");
-        attributesName.put(entityName, attributes);
+//        attributesName.put(entityName, attributes);
     }
 
     public static List<String> filter(String line) {

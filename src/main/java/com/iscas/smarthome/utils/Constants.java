@@ -5,7 +5,7 @@ import com.iscas.smarthome.homeassistant.EntityName;
 public class Constants {
 
     //拉取设备属性的时间间隔，单位：秒
-    public static int GET_ATTRIBUTE_TIME_GAP = 2;
+    public static int GET_ATTRIBUTE_TIME_GAP = 5;
 
     //调用服务的时间间隔，单位：秒
     public static int CALL_SERVICE_TIME_GAP = 20;
@@ -25,6 +25,12 @@ public class Constants {
     //状态边界的上下边界
     public static double UP_BORDER_ABNORMAL_THRESHOLD = 1.2;
     public static double DOWN_BORDER_ABNORMAL_THRESHOLD = 0.8;
+
+    //曲线相似度比较中，取值相似度的阈值
+    public static double VALUE_THRESHOLD = 0.25;
+
+    //曲线相似度比较中，斜率相似度的阈值
+    public static double SLOPE_THRESHOLD = 0.25;
 
     //设备名称（entity_id）
     public static String DEVICE_NAME = EntityName.AIR_HUMIDIFIER_NAME;

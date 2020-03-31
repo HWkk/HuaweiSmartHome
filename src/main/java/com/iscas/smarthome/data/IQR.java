@@ -43,8 +43,14 @@ public class IQR implements Serializable {
     }
 
     public boolean isOutlier(double value) {
-        double min = Q1 - Constants.IQR_THRESHOLD * IQR;
-        double max = Q3 + Constants.IQR_THRESHOLD * IQR;
-        return value < min || value > max;
+        return value < getLowerBoundary() || value > getUpperBoundary();
+    }
+
+    public double getUpperBoundary() {
+        return Q3 + Constants.IQR_THRESHOLD * IQR;
+    }
+
+    public double getLowerBoundary() {
+        return Q1 - Constants.IQR_THRESHOLD * IQR;
     }
 }
