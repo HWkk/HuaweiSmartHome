@@ -10,7 +10,7 @@
 
 ## 前后端交互过程
 
-![系统操作过程](/Users/kk/Documents/ISCAS/毕设/Graduation/图/系统操作过程.png)
+![系统操作过程](img/系统操作过程.png)
 
 
 
@@ -18,12 +18,12 @@
 
 **frontend**包里是前端Vue代码，frontend/src/components/List.vue是主要的显示页代码。前端显示共分为四部分：
 
-1. 属性获取：由用户输入实体名称，可以“获取过滤后的设备属性”，用户可以进一步对属性进行筛选，然后点击“开始构建模型”；![image-20200610164500863](/Users/kk/Library/Application Support/typora-user-images/image-20200610164500863.png)
-2. 模型构建：模型变化图会实时展示在界面上，结束之后可以开始异常检测与定位。![image-20200610165113933](/Users/kk/Library/Application Support/typora-user-images/image-20200610165113933.png)
-3. 输入属性与功能部件对应关系。![image-20200610165245784](/Users/kk/Library/Application Support/typora-user-images/image-20200610165245784.png)
+1. 属性获取：由用户输入实体名称，可以“获取过滤后的设备属性”，用户可以进一步对属性进行筛选，然后点击“开始构建模型”；![image-20200610164500863](img/part1.png)
+2. 模型构建：模型变化图会实时展示在界面上，结束之后可以开始异常检测与定位。![image-20200610165113933](img/part2.png)
+3. 输入属性与功能部件对应关系。![image-20200610165245784](img/part3.png)
 
-4. 按运行模式，实时展示属性数据。![image-20200610165348444](/Users/kk/Library/Application Support/typora-user-images/image-20200610165348444.png)
-5. 实时汇报异常检测定位信息。![image-20200610165431085](/Users/kk/Library/Application Support/typora-user-images/image-20200610165431085.png)
+4. 按运行模式，实时展示属性数据。![image-20200610165348444](img/part4.png)
+5. 实时汇报异常检测定位信息。![image-20200610165431085](img/part5.png)
 
 
 
@@ -31,7 +31,7 @@ List.vue中代码主要是根据以上各部分进行区分展示，同时会对
 
 run.sh是前端代码执行脚本，脚本执行之后会在控制台显示页面的ip地址，可直接访问。浏览器中输入下面地址，可以到达系统UI界面。
 
-![image-20200610164050852](/Users/kk/Library/Application Support/typora-user-images/image-20200610164050852.png)
+![image-20200610164050852](img/ip.png)
 
 ## 后端（模型与异常检测定位实现）
 
