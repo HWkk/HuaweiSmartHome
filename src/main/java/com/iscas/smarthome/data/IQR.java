@@ -4,6 +4,9 @@ import com.iscas.smarthome.utils.Constants;
 
 import java.io.Serializable;
 
+/**
+ * IQR表示
+ */
 public class IQR implements Serializable {
 
     private double Q1;

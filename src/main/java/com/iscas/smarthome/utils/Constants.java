@@ -47,12 +47,18 @@ public class Constants {
     //异常检测的时间间隔，单位：秒
     public static int CHECK_TIME_GAP = 50;
 
-    //每获取一定量数据，再进行异常检测与发送实时数据图
+    //每获取一定量数据，再进行(异常检测与)发送实时数据图
     public static int CHECK_STEP_GAP = 5;
+
+    //数据条数达到此阈值后，才开始进行检测过程，否则结果不准确
+    public static int CHECK_DATA_MIN_THRESHOLD = 50;
 
     //用于展示的模型图片目录
     public static String MODEL_PNG_DIR = "/Users/kk/Repositories/HuaweiSmartHome/frontend/public/img/model/";
 
     //用于展示的属性图片目录
     public static String ATTRIBUTE_PNG_DIR = "/Users/kk/Repositories/HuaweiSmartHome/frontend/public/img/attribute/";
+
+    //脚本地址（项目地址）
+    public static String SCRIPT_LOCATION = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/";
 }

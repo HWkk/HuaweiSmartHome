@@ -22,19 +22,25 @@ public class StartController {
 
     OuterGraph graph;
     String entityName;
-    int getAttrTimeGap = 5;
-    int callServiceTimeGap = 90;
-    int getAttrAfterCallingTimeGap = 1;
+    int getAttrTimeGap = 2;
+    int callServiceTimeGap = 10;
+    int getAttrAfterCallingTimeGap = 2;
 
     @Autowired
     private CustomWebSocket webSocket;
 
+    /**
+     * 前后端交互demo
+     */
     @RequestMapping("/start")
     public String start() {
         System.out.println("start");
         return "Hello, World!";
     }
 
+    /**
+     * 获取属性方法
+     */
     @RequestMapping("/getAttributes")
     public String getAttributes(HttpServletRequest request) {
         String entityName = request.getParameter("entityName");
@@ -43,17 +49,20 @@ public class StartController {
         return res.substring(1, res.length() - 1);
     }
 
+    /**
+     * 构建模型方法
+     */
     @RequestMapping("/buildModel")
     public void buildModel(HttpServletRequest request) {
         String[] strs = request.getParameter("checkList").split(",");
         List<String> list = new ArrayList<>();
         for(String s : strs)
             list.add(s.trim());
-        AttributesName.init();
-        AttributesName.addEntity(entityName, list);
+        AttributesName.init(); //初始化过程
+        AttributesName.addEntity(entityName, list); //将用户选择的属性更新到具体类中
 
-        this.graph = Caller.init(entityName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
-        Thread buildGraphThread = new Thread(new BuildGraphPhase(entityName, graph, webSocket));
+        this.graph = Caller.init(entityName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap); //初始化过程
+        Thread buildGraphThread = new Thread(new BuildGraphPhase(entityName, graph, webSocket)); //开始构建模型线程
         buildGraphThread.start();
         try {
             buildGraphThread.join();
@@ -75,6 +84,9 @@ public class StartController {
 //        webSocket.sendAllMessage("FinishModel");
     }
 
+    /**
+     * 获取过滤后的属性
+     */
     @RequestMapping("/getFilterAttributes")
     public String getFilterAttributes(HttpServletRequest request) {
         String entityName = request.getParameter("entityName");
@@ -82,10 +94,13 @@ public class StartController {
         return res.substring(1, res.length() - 1);
     }
 
+    /**
+     * 更新属性与功能部件对应关系，然后开始异常检测定位过程
+     */
     @RequestMapping("/putRelationAndStart")
     public void putRelationAndStart(HttpServletRequest request) {
         String relationList = request.getParameter("relationList");
-        System.out.println(relationList);
+//        System.out.println(relationList);
 
         String[] hardwareList = relationList.split(",");
         List<String> attributesList = AttributesName.getAttributes(entityName);
@@ -94,9 +109,7 @@ public class StartController {
             if(hardwareList[i] != null && hardwareList[i].length() != 0 && !hardwareList[i].equals(""))
                 AttrAndHardRelation.put(attributesList.get(i), hardwareList[i]);
         }
-        System.out.println(AttrAndHardRelation.print());
-
-        //TODO: 实时更新
+//        System.out.println(AttrAndHardRelation.print());
         new Thread(new CheckDataPhase(entityName, graph, webSocket)).start();
     }
 }

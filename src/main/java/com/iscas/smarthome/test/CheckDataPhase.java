@@ -1,6 +1,6 @@
 package com.iscas.smarthome.test;
 
-import com.iscas.smarthome.checkphase.DataUtils;
+import com.iscas.smarthome.utils.DataUtils;
 import com.iscas.smarthome.data.Data;
 import com.iscas.smarthome.homeassistant.Caller;
 import com.iscas.smarthome.specification.ModeMap;
@@ -30,7 +30,7 @@ public class CheckDataPhase implements Runnable{
         checkData = new HashMap<>();
         for(String mode : ModeMap.getMap().keySet())
             checkData.put(mode, new ArrayList<Attribute>());
-        new Thread(new CheckThread(graph, checkData)).start();
+//        new Thread(new CheckThread(graph, checkData)).start();
     }
 
     public CheckDataPhase(String deviceName, OuterGraph graph, CustomWebSocket webSocket) {
@@ -41,7 +41,6 @@ public class CheckDataPhase implements Runnable{
         for(String mode : ModeMap.getMap().keySet())
             checkData.put(mode, new ArrayList<Attribute>());
         this.webSocket = webSocket;
-//        new Thread(new CheckThread(graph, checkData)).start();
     }
 
     @Override
@@ -67,15 +66,17 @@ public class CheckDataPhase implements Runnable{
 //                synchronized (checkData) {
                 checkData.get(data.getMode()).add(data.getAttribute());
 //                }
+//                if(step >= Constants.CHECK_DATA_MIN_THRESHOLD)
+//                    graph.checkData(ModeMap.getState(data.getMode()), checkData.get(data.getMode()), webSocket);
                 if(step % Constants.CHECK_STEP_GAP == 0) {
-                    graph.checkData(ModeMap.getState(data.getMode()), checkData.get(data.getMode()), webSocket);
-
                     StringBuilder message = new StringBuilder("C:");
                     HashMap<String, List<String>> locations = DataUtils.getAllModeAttrFigure(checkData, deviceName);
                     for (Map.Entry<String, List<String>> entry : locations.entrySet())
                         message.append(entry.getKey() + entry.getValue().toString() + "+");
                     message.deleteCharAt(message.length() - 1);
                     webSocket.sendAllMessage(message.toString());
+
+                    graph.checkData(ModeMap.getState(data.getMode()), checkData.get(data.getMode()), webSocket);
                 }
                 Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);
             }

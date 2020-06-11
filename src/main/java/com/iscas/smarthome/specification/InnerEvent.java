@@ -2,6 +2,7 @@ package com.iscas.smarthome.specification;
 
 import java.util.HashSet;
 
+//弃用
 public class InnerEvent {
 
     private static HashSet<String> events = new HashSet<>();

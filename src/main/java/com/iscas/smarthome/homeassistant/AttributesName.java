@@ -12,6 +12,9 @@ public class AttributesName {
     //key为entity_id，value为要获取的属性名
     private static HashMap<String, List<String>> attributesName = new HashMap<>();
 
+    /**
+     * 测试用，使用中会根据实际情况对map进行构建
+     */
     public static void init() {
         //空气净化器
         modeAttribute.put(EntityName.AIR_PURIFIER_NAME, "mode");
@@ -48,7 +51,7 @@ public class AttributesName {
 
     public static void addEntity(String entityName, List<String> attributes) {
         modeAttribute.put(entityName, "mode");
-//        attributesName.put(entityName, attributes);
+        attributesName.put(entityName, attributes);
     }
 
     public static List<String> filter(String line) {

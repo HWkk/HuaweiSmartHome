@@ -1,4 +1,4 @@
-package com.iscas.smarthome.checkphase;
+package com.iscas.smarthome.utils;
 
 import com.iscas.smarthome.figures.PythonFigureUtils;
 import com.iscas.smarthome.figures.TimeData;
@@ -7,8 +7,6 @@ import com.iscas.smarthome.specification.ModeMap;
 import com.iscas.smarthome.stateautomaton.attribute.Attribute;
 import com.iscas.smarthome.stateautomaton.graph.InnerGraph;
 import com.iscas.smarthome.stateautomaton.state.OuterState;
-import com.iscas.smarthome.utils.Constants;
-import com.iscas.smarthome.utils.DateUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -26,9 +26,9 @@ public class BuildGraphPhase implements Runnable{
     @Override
     public void run() {
         int i = 0;
-        while(!graph.hasFinishedTest(deviceName)) {
-//        while(i++ < 4) {
-//            Caller.callService(deviceName, graph);
+//        while(!graph.hasFinishedTest(deviceName)) {
+        while(i++ < 5) {
+            Caller.callService(deviceName, graph);
             long start = System.currentTimeMillis();
             Timer.waitTimeGap(Constants.GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP);
             System.out.println("wait " + (System.currentTimeMillis() - start) + "ms to get attr");

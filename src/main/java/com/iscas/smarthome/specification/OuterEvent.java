@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+//弃用
 public class OuterEvent implements Event {
 
     private static HashMap<String, OuterState> eventMap = new HashMap<>();
 
     public static void addEvent(String event) {
         if(!eventMap.containsKey(event))
-            //TODO: 这块的deviceName不合适
             eventMap.put(event, new OuterState(event, ""));
     }
 

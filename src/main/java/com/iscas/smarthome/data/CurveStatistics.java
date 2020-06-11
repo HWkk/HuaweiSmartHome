@@ -1,5 +1,8 @@
 package com.iscas.smarthome.data;
 
+/**
+ * 曲线统计值
+ */
 public class CurveStatistics {
 
     private IQR slopeIQR;

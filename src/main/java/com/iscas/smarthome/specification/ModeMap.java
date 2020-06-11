@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+//弃用
 public class ModeMap {
 
     private static HashMap<String, OuterState> map = new HashMap<>();

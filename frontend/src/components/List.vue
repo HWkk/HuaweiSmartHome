@@ -1,6 +1,6 @@
 <template>
     <div id="list">
-        <vue-headful title="智能家居建模与应用系统" />
+        <vue-headful title="智能家居建模与异常定位系统" />
         <div>
             <div class="page-title">
                 <span><i class="icon-doc-text"></i>1. 属性获取</span>
@@ -27,16 +27,16 @@
             <span v-text="buildProcessText" class="prompt"></span>
             <img v-if="showModelPng" id="modelPng" src="http://img5.imgtn.bdimg.com/it/u=3670224609,2460418974&fm=26&gp=0.jpg" style="height: 300px; display: block; margin: 15px auto">
             
-            <el-button type="primary" @click="showRelation()" v-if="showUseModelButton">开启模型应用功能</el-button>
+            <el-button type="primary" @click="showRelation()" v-if="showUseModelButton">开始异常检测与定位</el-button>
 
         </div>
         <div>
             <div class="page-title" v-if="showConfirmButton">
-                <span><i class="icon-doc-text"></i>3. 输入属性与硬件的对应关系</span>
+                <span><i class="icon-doc-text"></i>3. 输入属性与功能部件的对应关系</span>
             </div>
 
             <div>
-                <span id="relationText" class="prompt" v-if="showConfirmButton">请输入可能与对应属性有关的设备硬件(用于定位异常原因)</span>
+                <span id="relationText" class="prompt" v-if="showConfirmButton">请输入可能与对应属性有关的功能部件(用于定位异常原因)</span>
             </div>
 
             <div v-if="showConfirmButton" style="margin-top: 10px">
@@ -46,7 +46,7 @@
                     </el-col>
                     <el-col :span="10">
                         <el-input v-model="relationList[index]" 
-                            placeholder="请输入可能有关系的设备硬件">
+                            placeholder="请输入可能有关系的功能部件">
                         </el-input>
                     </el-col>
                 </el-row>
@@ -77,7 +77,7 @@
 
         <div>
             <div class="page-title" v-if="showAttrPng">
-                <span><i class="icon-doc-text"></i>5. 模型应用结果</span>
+                <span><i class="icon-doc-text"></i>5. 异常检测与定位结果</span>
             </div>
             <div v-for="res in modelUseResult" v-if="showAttrPng">
                 {{ res }}

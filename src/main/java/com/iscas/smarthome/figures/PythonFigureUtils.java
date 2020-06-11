@@ -16,6 +16,9 @@ import java.util.List;
 
 public class PythonFigureUtils {
 
+    /**
+     * 读取日志信息，生成TimeData格式的数据（用于画图）
+     */
     private static List<TimeData> readLogFile(String fileName) {
         List<TimeData> res = new ArrayList<>();
         BufferedReader reader = null;
@@ -49,6 +52,9 @@ public class PythonFigureUtils {
         return res;
     }
 
+    /**
+     * 画单条线
+     */
     private static void drawLineChartSingle(List<TimeData> data, String entityId, String curFile, String saveFile) {
         int dimension = data.get(0).getAttribute().getDimension();
         List<String> attrNames = AttributesName.getAttributes(entityId);
@@ -92,13 +98,16 @@ public class PythonFigureUtils {
         }
     }
 
+    /**
+     * 画多条线
+     */
     public static void drawLineChartTogether(List<String> legends, List<List<TimeData>> data, String entityId, String saveFile) {
         List<String> attrNames = AttributesName.getAttributes(entityId);
         int dimension = attrNames.size();
 
         String[] args = new String[8];
         args[0] = "python";
-        args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/figures/linechart_together.py";
+        args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/figures/linechart_two.py";
         args[2] = "time(s)";
 
         List<List<String>> times = new ArrayList<>();
@@ -122,7 +131,7 @@ public class PythonFigureUtils {
                 values.add(v);
             }
             args[6] = values.toString();
-            args[7] = saveFile + "_" + attrNames.get(i) + ".png";
+            args[7] = saveFile + "_" + attrNames.get(i) + ".pdf";
 
             Process proc = null;
             try {
@@ -160,6 +169,7 @@ public class PythonFigureUtils {
         drawLineChartTogether(legends, data, entityId, saveFileName);
     }
 
+
     public static List<Double> getFileData(String fileName, int attrIndex) {
         List<TimeData> timeData = readLogFile(fileName);
         List<Double> attributes = new ArrayList<>();
@@ -169,6 +179,9 @@ public class PythonFigureUtils {
         return attributes;
     }
 
+    /**
+     * 计算统计值
+     */
     public static void getAllStatistics(List<Double> data) {
         IQR slopeIQR = CurveUtils.calSlopeIQR(data), valueIQR = CurveUtils.calValueIQR(data);
         double valueAvg = CurveUtils.calValueAvg(data), slopeAvg = CurveUtils.calSlopeAvg(data);
@@ -189,6 +202,9 @@ public class PythonFigureUtils {
         System.out.println("LowBoundary: " + slopeIQR.getLowerBoundary() + " UpBoundary: " + slopeIQR.getUpperBoundary());
     }
 
+    /**
+     * 计算两条曲线的相似度
+     */
     public static void getSimilarity(List<Double> data1, List<Double> data2) {
         IQR slopeIQR1 = CurveUtils.calSlopeIQR(data1), valueIQR1 = CurveUtils.calValueIQR(data1);
         double valueAvg1 = CurveUtils.calValueAvg(data1), slopeAvg1 = CurveUtils.calSlopeAvg(data1);
@@ -226,6 +242,10 @@ public class PythonFigureUtils {
         return 0.0;
     }
 
+    /**
+     * 测试用
+     * @param args
+     */
     public static void main(String[] args) {
 //        String deviceName = EntityName.AIR_HUMIDIFIER_NAME;
         String deviceName = EntityName.AIR_PURIFIER_NAME;
@@ -243,12 +263,13 @@ public class PythonFigureUtils {
 
         List<String> files = new ArrayList<>();
         files.add(dir + "normal");
-//        files.add(dir + "normal2");
+//        files.add(dir + "block_in");
 //        files.add(dir + "sensor_broke");
-        files.add(dir + "sensor_broke");
+//        files.add(dir + "filter_broke");
+        files.add(dir + "normal1");
         getTogetherFigure(files, deviceName, dir + "pythonFigures/together");
 
-        getAllStatistics(getFileData(dir + "sensor_broke", 2));
-        getSimilarity(getFileData(dir + "normal", 2), getFileData(dir + "sensor_broke", 2));
+//        getAllStatistics(getFileData(dir + "sensor_broke", 2));
+//        getSimilarity(getFileData(dir + "normal", 2), getFileData(dir + "sensor_broke", 2));
     }
 }

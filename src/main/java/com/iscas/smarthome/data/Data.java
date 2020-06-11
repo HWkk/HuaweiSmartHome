@@ -4,6 +4,9 @@ import com.iscas.smarthome.stateautomaton.attribute.Attribute;
 
 import java.io.Serializable;
 
+/**
+ * mode + attribute的对象表示
+ */
 public class Data implements Serializable{
 
     private String mode;
