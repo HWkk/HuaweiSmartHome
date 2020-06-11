@@ -2,13 +2,16 @@ package com.iscas.smarthome.utils;
 
 import com.iscas.smarthome.homeassistant.EntityName;
 
+/**
+ * 一些常量信息
+ */
 public class Constants {
 
     //拉取设备属性的时间间隔，单位：秒
-    public static int GET_ATTRIBUTE_TIME_GAP = 5;
+    public static int GET_ATTRIBUTE_TIME_GAP = 2;
 
     //调用服务的时间间隔，单位：秒
-    public static int CALL_SERVICE_TIME_GAP = 20;
+    public static int CALL_SERVICE_TIME_GAP = 15;
 
     //在调用服务一定时间间隔后，再获取属性，时间间隔为该值
     public static int GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP = 5;

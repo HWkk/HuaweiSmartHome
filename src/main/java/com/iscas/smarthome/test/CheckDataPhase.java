@@ -14,6 +14,9 @@ import com.iscas.smarthome.websocket.CustomWebSocket;
 
 import java.util.*;
 
+/**
+ * 异常检测与定位线程
+ */
 public class CheckDataPhase implements Runnable{
 
     String deviceName;
@@ -22,6 +25,7 @@ public class CheckDataPhase implements Runnable{
     CustomWebSocket webSocket;
     int step = 0;
 
+    //弃用
     public CheckDataPhase(String deviceName) {
         this.deviceName = deviceName;
         this.graph = (OuterGraph) FileUtils.readFromFile(Constants.GRAPH_DIR + deviceName + "/model1");
@@ -46,6 +50,7 @@ public class CheckDataPhase implements Runnable{
     @Override
     public void run() {
         while(true) {
+            //调用操作
             Caller.callService(deviceName, graph);
             long start = System.currentTimeMillis();
             Timer.waitTimeGap(Constants.GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP);
@@ -61,14 +66,11 @@ public class CheckDataPhase implements Runnable{
                 Data data = Caller.getAttribute(deviceName);
                 step++;
 
-                //在CheckThread里要读checkData，在此处要写checkData，需要加锁
-                //TODO: 需要检测正确性
-//                synchronized (checkData) {
                 checkData.get(data.getMode()).add(data.getAttribute());
-//                }
 //                if(step >= Constants.CHECK_DATA_MIN_THRESHOLD)
 //                    graph.checkData(ModeMap.getState(data.getMode()), checkData.get(data.getMode()), webSocket);
                 if(step % Constants.CHECK_STEP_GAP == 0) {
+                    //发送给前端属性展示图的地址
                     StringBuilder message = new StringBuilder("C:");
                     HashMap<String, List<String>> locations = DataUtils.getAllModeAttrFigure(checkData, deviceName);
                     for (Map.Entry<String, List<String>> entry : locations.entrySet())
@@ -76,6 +78,7 @@ public class CheckDataPhase implements Runnable{
                     message.deleteCharAt(message.length() - 1);
                     webSocket.sendAllMessage(message.toString());
 
+                    //异常检测定位
                     graph.checkData(ModeMap.getState(data.getMode()), checkData.get(data.getMode()), webSocket);
                 }
                 Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);

@@ -4,6 +4,9 @@ import com.iscas.smarthome.homeassistant.Caller;
 import com.iscas.smarthome.utils.Constants;
 import com.iscas.smarthome.utils.Timer;
 
+/**
+ * 弃用
+ */
 public class CallServiceThread implements Runnable{
 
     String deviceName;

@@ -7,6 +7,9 @@ import com.iscas.smarthome.utils.Constants;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 调用python脚本的java类
+ */
 public class Caller {
 
     private static int preIndex = -1;
@@ -23,6 +26,9 @@ public class Caller {
         HAScript.getAllServices();
     }
 
+    /**
+     * 弃用
+     */
     public static void callService(String deviceName) {
         List<String> services = ServiceName.getServices(deviceName);
         Random random = new Random();
@@ -36,6 +42,9 @@ public class Caller {
         HAScript.callService(deviceName, services.get(index));
     }
 
+    /**
+     * 在graph对象里以随机方式调用操作
+     */
     public static void callService(String deviceName, OuterGraph graph) {
         List<String> services = ServiceName.getServices(deviceName);
         int index = -1;
@@ -48,11 +57,11 @@ public class Caller {
         HAScript.callService(deviceName, services.get(index));
     }
 
-    public static OuterGraph init(String deviceName, int getAttrTimeGap, int callServiceTimeGap, int getAttrAfterCallingTimeGap) {
+    /**
+     * 初始化过程
+     */
+    public static OuterGraph init(String deviceName) {
         Constants.DEVICE_NAME = deviceName;
-        Constants.GET_ATTRIBUTE_TIME_GAP = getAttrTimeGap;
-        Constants.CALL_SERVICE_TIME_GAP = callServiceTimeGap;
-        Constants.GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP = getAttrAfterCallingTimeGap;
         return new OuterGraph(deviceName);
     }
 }

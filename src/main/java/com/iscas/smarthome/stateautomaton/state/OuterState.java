@@ -15,13 +15,23 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.*;
 
+/**
+ * 外部状态表示
+ */
 public class OuterState implements State, Externalizable {
 
+    //邻接图形式记录图信息
     private HashMap<OuterState, Edge> outNeighbors;
+
+    //概率图信息使用
     private HashMap<OuterState, Integer> inNeighborsCount;
+    private int totalInCount;
+
+    //内部状态转换
     private InnerGraph innerGraph;
     private String name;
-    private int totalInCount;
+
+    //记录当前状态的操作调用情况，用于判断测试过程是否收敛
     private boolean[] serviceCalled;
 
     public OuterState(String name, String deviceName) {
@@ -62,20 +72,32 @@ public class OuterState implements State, Externalizable {
         return totalInCount;
     }
 
+    /**
+     * 添加新的邻居外部状态
+     */
     public void addOutNeighbor(Edge e) {
         if(!outNeighbors.containsKey(e.getTarget()))
             outNeighbors.put(e.getTarget(), e);
     }
 
+    /**
+     * 统计信息，用于概率计算
+     */
     public void addInNeighbor(Edge e) {
         inNeighborsCount.put(e.getSource(), inNeighborsCount.getOrDefault(e.getSource(), 0) + 1);
         totalInCount++;
     }
 
+    /**
+     * 统计信息，用于概率计算
+     */
     public double getInNeighborPercent(OuterState state) {
         return (double)inNeighborsCount.getOrDefault(state, 0) / totalInCount;
     }
 
+    /**
+     * 添加内部状态
+     */
     public void addInnerState(InnerState state, String deviceName) {
         innerGraph.addInnerStateByRelativeTime(state);
 //        innerGraph.addInnerStateByAbsoluteTime(state);
@@ -117,12 +139,18 @@ public class OuterState implements State, Externalizable {
 //        return -1;
 //    }
 
+    /**
+     * 判断曲线是否相似
+     */
     public int isCurveSimilar(List<Attribute> data) {
         if(innerGraph.getStateSize() == 0 || data.size() == 0) return -1;
         List<Attribute> normalAttributes = new ArrayList<>();
         for(int i = 0; i < innerGraph.getStateSize(); i++)
             normalAttributes.add(innerGraph.getState(i).getAttribute());
 
+        /**
+         * 每个属性都进行检测
+         */
         for(int i = 0; i < data.get(0).getDimension(); i++) {
             List<Double> curAttr = new ArrayList<>();
             for(Attribute attribute : data)
@@ -132,6 +160,7 @@ public class OuterState implements State, Externalizable {
             for(Attribute attribute : normalAttributes)
                 normalAttr.add(attribute.getAttribute(i));
 
+            //得到相似度
             double valueSim = CurveUtils.getValueSimilarity(curAttr, normalAttr);
             double slopeSim = CurveUtils.getSlopeSimilarity(curAttr, normalAttr);
             if(valueSim < Constants.VALUE_THRESHOLD || slopeSim < Constants.SLOPE_THRESHOLD)
@@ -140,6 +169,9 @@ public class OuterState implements State, Externalizable {
         return -1;
     }
 
+    /**
+     * 异常检测，先用模式边界判断，再判断曲线相似度
+     */
     public int checkNormal(List<Attribute> data) {
         int stateBorderRes = overStateBorder(data.get(data.size() - 1));
         if(stateBorderRes != -1) return stateBorderRes;
@@ -148,6 +180,9 @@ public class OuterState implements State, Externalizable {
         return -1;
     }
 
+    /**
+     * 判断是否超出模式边界
+     */
     public int overStateBorder(Attribute data) {
         Attribute[] border = getStateBorder();
         int dimension = data.getDimension();
@@ -160,6 +195,9 @@ public class OuterState implements State, Externalizable {
         return -1;
     }
 
+    /**
+     * 计算模式边界
+     */
     public Attribute[] getStateBorder() {
         int dimension = innerGraph.getState(0).getAttribute().getDimension();
         Attribute max = new Attribute(dimension), min = new Attribute(dimension);
@@ -181,6 +219,9 @@ public class OuterState implements State, Externalizable {
         return new Attribute[]{min, max};
     }
 
+    /**
+     * 回溯过程
+     */
     public String backtrace(int attrIndex, InnerState state) {
         InnerState pre = null, curInnerState = state;
         OuterState curOuter = this;
@@ -192,9 +233,13 @@ public class OuterState implements State, Externalizable {
         String event = "";
 
         for(int i = 0; i < Constants.BACK_COUNT; i++) {
-            String curEvent = "";
+            String curEvent = "工作时间太长或者环境突变";
             pre = curInnerState;
+
             if(index < 0) {
+                /**
+                 * 到达内部状态链表的头部，则对当前外部状态进行转换
+                 */
                 OuterState newOuter = curOuter.findMaxPreOuter();
                 index = newOuter.findMaxInner();
                 curInnerState = newOuter.getInnerGraph().getState(index--);
@@ -204,6 +249,10 @@ public class OuterState implements State, Externalizable {
                 curInnerState = curOuter.getInnerGraph().getState(index--);
                 curEvent = "工作时间太长或者环境突变";
             }
+
+            /**
+             * 计算影响程度最大的
+             */
             double influence = Math.abs(pre.getAttribute().getAttribute(attrIndex) - curInnerState.getAttribute().getAttribute(attrIndex));
             if (influence > maxInfluence) {
                 maxInfluence = influence;
@@ -213,6 +262,9 @@ public class OuterState implements State, Externalizable {
         return event;
     }
 
+    /**
+     * 异常定位，首先根据对应关系查表，然后回溯
+     */
     public String findAbnormalReason(int attrIndex, InnerState state, String deviceName) {
         String attrName = AttributesName.getAttributes(deviceName).get(attrIndex);
         if(AttrAndHardRelation.containsAttribute(attrName))
@@ -220,6 +272,9 @@ public class OuterState implements State, Externalizable {
         return backtrace(attrIndex, state);
     }
 
+    /**
+     * 根据概率信息找到转换的外部状态
+     */
     public OuterState findMaxPreOuter() {
         OuterState res = null;
         int maxFrequency = 0;
@@ -232,6 +287,9 @@ public class OuterState implements State, Externalizable {
         return res;
     }
 
+    /**
+     * 根据概率信息开始回溯的内部状态
+     */
     public int findMaxInner() {
         int res = 0;
         double maxPercentage = 0.0;
@@ -245,20 +303,32 @@ public class OuterState implements State, Externalizable {
         return res;
     }
 
+    /**
+     * 根据index找到对应的内部状态
+     */
     public InnerState findCorrespondInner(int i) {
         return innerGraph.getState(i);
     }
 
+    /**
+     * 记录跃迁，用于后续概率计算
+     */
     public void leaveState(int time) {
         innerGraph.addLeaveCount(time);
     }
 
+    /**
+     * 判断操作是否都调用完了
+     */
     public boolean serviceAllCalled() {
         for(boolean b : serviceCalled)
             if(!b) return false;
         return true;
     }
 
+    /**
+     * 获取下一个未调用的操作
+     */
     public int getUncalled() {
         int index = 0;
         Random rand = new Random();
@@ -299,6 +369,9 @@ public class OuterState implements State, Externalizable {
         return sb.toString();
     }
 
+    /**
+     * 序列化顺序
+     */
     @Override
     public void writeExternal(final ObjectOutput o) throws IOException {
         o.writeUTF(name);
@@ -309,6 +382,9 @@ public class OuterState implements State, Externalizable {
         o.writeObject(outNeighbors);
     }
 
+    /**
+     * 反序列化顺序
+     */
     @SuppressWarnings("unchecked")
     @Override
     public void readExternal(final ObjectInput o) throws IOException, ClassNotFoundException {

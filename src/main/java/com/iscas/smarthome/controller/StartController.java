@@ -58,11 +58,16 @@ public class StartController {
         List<String> list = new ArrayList<>();
         for(String s : strs)
             list.add(s.trim());
-        AttributesName.init(); //初始化过程
-        AttributesName.addEntity(entityName, list); //将用户选择的属性更新到具体类中
+        //初始化过程
+        AttributesName.init();
+        //将用户选择的属性更新到具体类中
+        AttributesName.addEntity(entityName, list);
 
-        this.graph = Caller.init(entityName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap); //初始化过程
-        Thread buildGraphThread = new Thread(new BuildGraphPhase(entityName, graph, webSocket)); //开始构建模型线程
+        //初始化过程
+        this.graph = Caller.init(entityName);
+
+        //开始构建模型线程
+        Thread buildGraphThread = new Thread(new BuildGraphPhase(entityName, graph, webSocket));
         buildGraphThread.start();
         try {
             buildGraphThread.join();

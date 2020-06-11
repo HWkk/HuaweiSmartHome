@@ -4,6 +4,9 @@ import com.iscas.smarthome.stateautomaton.state.OuterState;
 
 import java.io.Serializable;
 
+/**
+ * 模型外部边表示
+ */
 public class Edge implements Serializable {
 
     private OuterState source;

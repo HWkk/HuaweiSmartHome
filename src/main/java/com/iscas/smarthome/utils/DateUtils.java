@@ -3,6 +3,9 @@ package com.iscas.smarthome.utils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * 时间处理类
+ */
 public class DateUtils {
 
     public static String getDate() {

@@ -12,6 +12,8 @@ import java.util.List;
 public class InputUtils {
 
     /**
+     * 弃用
+     *
      * 将Specification文件中的event与状态对应起来
      * 文件格式：
      * 第一行是OuterEvent，event之间用逗号分隔
@@ -54,6 +56,8 @@ public class InputUtils {
     }
 
     /**
+     * 弃用
+     *
      * 读取log文件，构建图
      * 文件格式：
      * Event A1,A2,A3……Ad
@@ -90,6 +94,9 @@ public class InputUtils {
         return res;
     }
 
+    /**
+     * 将python返回来的字符串信息，处理成属性向量格式
+     */
     public static Attribute strToAttribute(String s) {
         s = s.trim();
         while(!Character.isDigit(s.charAt(0)))

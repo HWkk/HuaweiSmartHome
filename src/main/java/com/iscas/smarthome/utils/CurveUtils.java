@@ -7,18 +7,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * 曲线计算方法
+ */
 public class CurveUtils {
 
+    /**
+     * 计算曲线统计值
+     */
     public static CurveStatistics calStatistics(List<Double> data) {
         return new CurveStatistics(calSlopeIQR(data), calValueIQR(data));
     }
 
+    /**
+     * 计算中位数
+     */
     public static double calMedian(List<Double> data, int start, int end) {
         int len = end - start + 1;
         if(len % 2 == 1) return data.get(start + len / 2);
         return (data.get(start + len / 2 - 1) + data.get(start + len / 2)) / 2.0;
     }
 
+    /**
+     * 计算取值的IQR
+     */
     public static IQR calValueIQR(List<Double> data) {
         if(data.size() == 0) return new IQR(0.0, 0.0);
         if(data.size() == 1) return new IQR(data.get(0), data.get(0));
@@ -38,6 +50,9 @@ public class CurveUtils {
         return new IQR(Q1, Q3);
     }
 
+    /**
+     * 计算斜率的IQR
+     */
     public static IQR calSlopeIQR(List<Double> data) {
         List<Double> slopes = new ArrayList<>();
         for(int i = 1; i < data.size(); i++)
@@ -45,6 +60,9 @@ public class CurveUtils {
         return calValueIQR(slopes);
     }
 
+    /**
+     * 计算取值的中位数
+     */
     public static double calValueMedian(List<Double> data) {
         if(data.size() == 0) return 0.0;
         if(data.size() == 1) return data.get(0);
@@ -55,6 +73,9 @@ public class CurveUtils {
         return calMedian(temp, 0, temp.size() - 1);
     }
 
+    /**
+     * 计算斜率的中位数
+     */
     public static double calSlopeMedian(List<Double> data) {
         List<Double> slopes = new ArrayList<>();
         for (int i = 1; i < data.size(); i++)
@@ -62,6 +83,9 @@ public class CurveUtils {
         return calValueMedian(slopes);
     }
 
+    /**
+     * 计算取值的平均值
+     */
     public static double calValueAvg(List<Double> data) {
         if(data.size() == 0) return 0.0;
         double sum = 0.0;
@@ -70,6 +94,9 @@ public class CurveUtils {
         return sum / data.size();
     }
 
+    /**
+     * 计算斜率的平均值
+     */
     public static double calSlopeAvg(List<Double> data) {
         List<Double> slopes = new ArrayList<>();
         for (int i = 1; i < data.size(); i++)
@@ -77,6 +104,9 @@ public class CurveUtils {
         return calValueAvg(slopes);
     }
 
+    /**
+     * 实际系统的相似度计算中不用，计算取值的方差
+     */
     public static double calValueDelta(List<Double> data) {
         double avg = calValueAvg(data);
         double res = 0.0;
@@ -85,6 +115,9 @@ public class CurveUtils {
         return Math.sqrt(res / data.size());
     }
 
+    /**
+     * 实际系统的相似度计算中不用，计算斜率的方差
+     */
     public static double calSlopeDelta(List<Double> data) {
         List<Double> slopes = new ArrayList<>();
         for (int i = 1; i < data.size(); i++)
@@ -92,6 +125,9 @@ public class CurveUtils {
         return calValueDelta(slopes);
     }
 
+    /**
+     * 计算取值的相似度
+     */
     public static double getValueSimilarity(List<Double> data1, List<Double> data2) {
         IQR valueIQR1 = CurveUtils.calValueIQR(data1);
         double valueAvg1 = CurveUtils.calValueAvg(data1);
@@ -110,6 +146,9 @@ public class CurveUtils {
         return (valueS1 + valueS2) / 2.0;
     }
 
+    /**
+     * 计算斜率的相似度
+     */
     public static double getSlopeSimilarity(List<Double> data1, List<Double> data2) {
         IQR slopeIQR1 = CurveUtils.calSlopeIQR(data1);
         double slopeAvg1 = CurveUtils.calSlopeAvg(data1);
@@ -128,6 +167,9 @@ public class CurveUtils {
         return (slopeS1 + slopeS2) / 2.0;
     }
 
+    /**
+     * 取值和斜率通用的相似度计算公式
+     */
     public static double getSimilarity(double q1, double q3, double statistics) {
         if(q3 == q1) return statistics == (q1 + q3) / 2 ? 1.0 : 0.0;
         if(statistics >= q1 && statistics <= q3)

@@ -2,6 +2,9 @@ package com.iscas.smarthome.stateautomaton.state;
 
 import com.iscas.smarthome.stateautomaton.attribute.Attribute;
 
+/**
+ * 内部状态表示
+ */
 public class InnerState implements State{
 
     private String name;
@@ -44,6 +47,9 @@ public class InnerState implements State{
         this.attribute = attribute;
     }
 
+    /**
+     * 以衰减方式更新
+     */
     public void mergeWithAttribute(InnerState state, double decay) {
         attribute.mergeWithOther(state.getAttribute(), decay);
     }

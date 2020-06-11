@@ -5,6 +5,9 @@ import com.iscas.smarthome.utils.Constants;
 import java.io.Serializable;
 import java.util.Arrays;
 
+/**
+ * 模型的属性向量表示
+ */
 public class Attribute implements Serializable {
 
     private double[] attributes;

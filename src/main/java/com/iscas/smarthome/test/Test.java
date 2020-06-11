@@ -5,6 +5,9 @@ import com.iscas.smarthome.homeassistant.EntityName;
 import com.iscas.smarthome.homeassistant.ServiceName;
 import com.iscas.smarthome.stateautomaton.graph.OuterGraph;
 
+/**
+ * 测试用
+ */
 public class Test {
 
 //    public static void main(String[] args) {
@@ -26,11 +29,7 @@ public class Test {
 
 //        String deviceName = EntityName.AIR_HUMIDIFIER_NAME;
         String deviceName = EntityName.AIR_PURIFIER_NAME;
-        int getAttrTimeGap = 5;
-        int callServiceTimeGap = 90;
-        int getAttrAfterCallingTimeGap = 60;
-
-        OuterGraph graph = Caller.init(deviceName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
+        OuterGraph graph = Caller.init(deviceName);
 //        Thread buildGraphThread = new Thread(new BuildGraphPhase(deviceName, graph));
 //        buildGraphThread.start();
 //        buildGraphThread.join();

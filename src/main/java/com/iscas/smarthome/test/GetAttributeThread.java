@@ -6,6 +6,9 @@ import com.iscas.smarthome.stateautomaton.graph.OuterGraph;
 import com.iscas.smarthome.utils.Constants;
 import com.iscas.smarthome.utils.Timer;
 
+/**
+ * 弃用
+ */
 public class GetAttributeThread implements Runnable{
 
     String deviceName;

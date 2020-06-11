@@ -2,6 +2,9 @@ package com.iscas.smarthome.utils;
 
 import java.io.*;
 
+/**
+ * 与文件交互的一些方法，主要是将模型序列化到文件中，并反序列化读取
+ */
 public class FileUtils {
 
     public static void saveToFile(String dataPath, Object object) {

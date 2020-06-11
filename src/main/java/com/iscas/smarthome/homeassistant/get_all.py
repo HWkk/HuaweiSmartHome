@@ -6,7 +6,7 @@ import json
 
 from websocket import create_connection
 
-
+# connect to HA
 def open_connection():
     ws = create_connection("ws://localhost:8123/api/websocket")
 
@@ -22,6 +22,7 @@ def open_connection():
 
     return ws
 
+# get device attributes
 def get_device(entity_id):
 
     ws = open_connection()

@@ -18,12 +18,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * 模型的外部状态图
+ */
 public class OuterGraph implements Graph {
 
     private static final long serialVersionUID = 1L;
 
+    //包含若干个外部状态
     private List<OuterState> states;
+
+    //记录之前的外部状态
     private OuterState preState = null;
+
+    //设备实体名称
     private String deviceName;
     private int time = 0;
 
@@ -32,24 +40,39 @@ public class OuterGraph implements Graph {
         this.deviceName = deviceName;
     }
 
+    /**
+     * 添加边
+     */
     public void addEdge(Edge edge) {
         edge.getSource().addOutNeighbor(edge);
         edge.getTarget().addInNeighbor(edge);
     }
 
+    /**
+     * 添加状态
+     */
     public void addState(OuterState state) {
         states.add(state);
     }
 
+    /**
+     * 弃用
+     */
     public void initStates() {
         for(OuterState state : OuterEvent.getAllStates())
             addState(state);
     }
 
+    /**
+     * 弃用
+     */
     public OuterState getPreState() {
         return preState;
     }
 
+    /**
+     * 弃用
+     */
 //    public void buildGraph(List<Data> input) {
 //        OuterState preState = null;
 //        int time = 0;
@@ -73,6 +96,9 @@ public class OuterGraph implements Graph {
 //        }
 //    }
 
+    /**
+     * 随机调用操作
+     */
     public int callService() {
         if(preState == null)
             return 0;
@@ -145,6 +171,9 @@ public class OuterGraph implements Graph {
 //        }
 //    }
 
+    /**
+     * 异常检测与定位
+     */
     public void checkData(OuterState state, List<Attribute> data, CustomWebSocket webSocket) {
         int checkNormalRes = state.checkNormal(data);
         if(checkNormalRes == -1)
@@ -164,6 +193,9 @@ public class OuterGraph implements Graph {
         }
     }
 
+    /**
+     * 转换成dot语言，生成可视化图
+     */
     public String toGraph() {
         GraphViz graph = new GraphViz(Constants.GRAPH_DIR + deviceName + "/graph/", DateUtils.getDate());
         graph.startGraph();
@@ -210,6 +242,9 @@ public class OuterGraph implements Graph {
         return graph.run();
     }
 
+    /**
+     * 判断测试过程是否收敛
+     */
     public boolean hasFinishedTest(String deviceName) {
         //如果state都还不全，那肯定没完成
         if(states.size() < ServiceName.getServices(deviceName).size())

@@ -1,5 +1,8 @@
 package com.iscas.smarthome.utils;
 
+/**
+ * 定时器，单位：秒
+ */
 public class Timer {
 
     public static void waitTimeGap(int timeGap) {

@@ -15,6 +15,9 @@ public class HAScript {
     private static int ATTR_ARGS_PREFIX = 4;
     private static Logger logger= Logger.getLogger(HAScript.class.getName());
 
+    /**
+     * 获取指定的设备属性
+     */
     public static Data getAttribute(String entityId) {
         Data data = null;
         try {
@@ -53,10 +56,12 @@ public class HAScript {
         return data;
     }
 
+    /**
+     * 获取设备的所有属性
+     */
     public static String getAllAttributes(String entityId) {
         String res = "";
         try {
-            List<String> attributes = AttributesName.getAttributes(entityId);
             String[] args = new String[3];
             args[0] = "python";
 //            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/get_all.py";
@@ -81,6 +86,9 @@ public class HAScript {
         return res;
     }
 
+    /**
+     * 获取设备的所有操作
+     */
     public static void getAllServices() {
         try {
 //            ArrayList<String> attributes = AttributesName.getAttributes(entityId);
@@ -105,6 +113,9 @@ public class HAScript {
         }
     }
 
+    /**
+     * 调用设备操作
+     */
     public static void callService(String entityId, String serviceName) {
         try {
 //            ArrayList<String> attributes = AttributesName.getAttributes(entityId);

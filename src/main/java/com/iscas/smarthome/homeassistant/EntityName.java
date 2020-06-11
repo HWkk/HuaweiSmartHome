@@ -1,5 +1,8 @@
 package com.iscas.smarthome.homeassistant;
 
+/**
+ * 设备在HA中对应的实体名称
+ */
 public class EntityName {
 
     //空气净化器

@@ -28,14 +28,11 @@ def draw_linechart(x_name, x_values, y_name, y_legends, y_values, save_file):
     y_max = -sys.maxint
     for i in range(len(y_legends)):
         x_values[i] = [int(e) for e in x_values[i]]
+        plt.plot(x_values[i], y_values[i])
         # if i == 0:
-        #     plt.plot(x_values[i], y_values[i], marker='D', color='black', markersize=2)
+        #     plt.plot(x_values[i], y_values[i], color='black')
         # else:
-        #     plt.plot(x_values[i], y_values[i], marker='^', color='black', markersize=2)
-        if i == 0:
-            plt.plot(x_values[i], y_values[i], color='black')
-        else:
-            plt.plot(x_values[i], y_values[i], color='black', linestyle='--')
+        #     plt.plot(x_values[i], y_values[i], color='black', linestyle='--')
 
     # y_major_locator = MultipleLocator(50)
     # plt.gca().yaxis.set_major_locator(y_major_locator)

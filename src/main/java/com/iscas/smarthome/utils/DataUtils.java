@@ -13,8 +13,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * 该类主要是从模型和实时数据中读取设备信息，然后对数据进行处理，并调用python脚本作图
+ */
 public class DataUtils {
 
+    /**
+     * 从模型中读取属性信息
+     */
     public static List<TimeData> getModeDataFromModel(String mode) {
         List<TimeData> res = new ArrayList<>();
         OuterState outerState = ModeMap.getState(mode);
@@ -29,6 +35,9 @@ public class DataUtils {
         return res;
     }
 
+    /**
+     * 从记录的实时数据中读取属性信息
+     */
     public static List<TimeData> getModeDataFromCheck(String mode, HashMap<String, List<Attribute>> checkData) {
         List<TimeData> res = new ArrayList<>();
         List<Attribute> attributes = checkData.get(mode);
@@ -42,6 +51,9 @@ public class DataUtils {
         return res;
     }
 
+    /**
+     * 为单个模式作图
+     */
     public static void getModeAttrFigure(String mode, HashMap<String, List<Attribute>> map, String entityId, String saveFile) {
         List<TimeData> modelData = getModeDataFromModel(mode);
         List<TimeData> checkData = getModeDataFromCheck(mode, map);
@@ -58,6 +70,9 @@ public class DataUtils {
         PythonFigureUtils.drawLineChartTogether(legends, data, entityId, saveFile);
     }
 
+    /**
+     * 为所有模式作图
+     */
     public static HashMap<String, List<String>> getAllModeAttrFigure(HashMap<String, List<Attribute>> map, String entityId) {
         List<String> attributes = AttributesName.getAttributes(entityId);
         HashMap<String, List<String>> locations = new HashMap<>();

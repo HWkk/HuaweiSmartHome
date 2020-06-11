@@ -4,6 +4,9 @@ package com.iscas.smarthome.homeassistant;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * 设备与对应的操作名称
+ */
 public class ServiceName {
 
     public static String preService = "";

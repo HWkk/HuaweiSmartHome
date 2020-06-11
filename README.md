@@ -1,6 +1,6 @@
 ## 系统使用说明
 
-系统需要机器安装Java环境、配置HomeAssistant环境。web展示使用vue框架，server端使用SpringBoot进行部署。使用步骤如下：
+系统需要机器安装Java环境、Python环境、配置HomeAssistant环境。web展示使用vue框架，server端使用SpringBoot进行部署。使用步骤如下：
 
 1. 将设备接入Home Assistant。
 2. 配置代码目录中Utils/Constants的文件路径、系统参数等信息。

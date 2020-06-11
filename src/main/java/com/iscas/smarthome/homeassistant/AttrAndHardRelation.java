@@ -2,6 +2,9 @@ package com.iscas.smarthome.homeassistant;
 
 import java.util.HashMap;
 
+/**
+ * 保存属性与功能部件的对应关系
+ */
 public class AttrAndHardRelation {
 
     private static HashMap<String, String> relation = new HashMap<>();

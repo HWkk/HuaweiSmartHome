@@ -131,7 +131,7 @@ public class PythonFigureUtils {
                 values.add(v);
             }
             args[6] = values.toString();
-            args[7] = saveFile + "_" + attrNames.get(i) + ".pdf";
+            args[7] = saveFile + "_" + attrNames.get(i) + ".png";
 
             Process proc = null;
             try {
@@ -249,10 +249,7 @@ public class PythonFigureUtils {
     public static void main(String[] args) {
 //        String deviceName = EntityName.AIR_HUMIDIFIER_NAME;
         String deviceName = EntityName.AIR_PURIFIER_NAME;
-        int getAttrTimeGap = 5;
-        int callServiceTimeGap = 90;
-        int getAttrAfterCallingTimeGap = 60;
-        Caller.init(deviceName, getAttrTimeGap, callServiceTimeGap, getAttrAfterCallingTimeGap);
+        Caller.init(deviceName);
         AttributesName.init();
         String dir = Constants.GRAPH_DIR + deviceName + "/";
 

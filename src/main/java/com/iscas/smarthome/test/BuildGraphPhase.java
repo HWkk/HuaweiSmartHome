@@ -11,6 +11,9 @@ import com.iscas.smarthome.websocket.CustomWebSocket;
 
 import java.util.Random;
 
+/**
+ * 构建模型的线程
+ */
 public class BuildGraphPhase implements Runnable{
 
     String deviceName;
@@ -26,8 +29,10 @@ public class BuildGraphPhase implements Runnable{
     @Override
     public void run() {
         int i = 0;
+        //当模型未收敛时
 //        while(!graph.hasFinishedTest(deviceName)) {
         while(i++ < 5) {
+            //调用操作
             Caller.callService(deviceName, graph);
             long start = System.currentTimeMillis();
             Timer.waitTimeGap(Constants.GET_ATTRIBUTE_AFTER_CALL_SERVICE_GAP);
@@ -42,12 +47,15 @@ public class BuildGraphPhase implements Runnable{
 //            int nextServiceCallGap = Constants.CALL_SERVICE_TIME_GAP;
 
             while((System.currentTimeMillis() - start) / 1000 < nextServiceCallGap) {
+                //获取属性
                 Data data = Caller.getAttribute(deviceName);
+                //处理属性数据
                 graph.processDataByRelativeTime(data);
 //                graph.processDataByAbsoluteTime(data);
                 graph.print();
                 String fileLoc = graph.toGraph();
                 String fileName = fileLoc.substring(fileLoc.lastIndexOf("/") + 1);
+                //将本地实时生成的图片复制到项目内，用于系统展示
                 FileUtils.copyFile(fileLoc, Constants.MODEL_PNG_DIR + deviceName + "/", fileName);
                 webSocket.sendAllMessage("M:/img/model/" + deviceName + "/" + fileName);
                 Timer.waitTimeGap(Constants.GET_ATTRIBUTE_TIME_GAP);
@@ -55,6 +63,8 @@ public class BuildGraphPhase implements Runnable{
         }
         System.out.println("Test Finished. Model Completed.");
         webSocket.sendAllMessage("M:FinishModel");
+
+        //将模型以序列化方式存储到文件
         FileUtils.saveToFile(Constants.GRAPH_DIR + deviceName + "/model1", graph);
         FileUtils.saveToFile(Constants.GRAPH_DIR + deviceName + "/modeMap1", ModeMap.getMap());
     }

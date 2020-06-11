@@ -12,7 +12,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @Component
 @ServerEndpoint("/websocket")
-//此注解相当于设置访问URL
+/**
+ * 此注解相当于设置访问URL
+ */
 public class CustomWebSocket {
 
     private Session session;
@@ -51,7 +53,7 @@ public class CustomWebSocket {
     // 此为单点消息
     public void sendOneMessage(String message) {
         try {
-            //TODO: 这样用session是null，先用上面的广播发送
+            //这样用session是null，先用上面的广播发送
             this.session.getBasicRemote().sendText(message);
         } catch (IOException e) {
             e.printStackTrace();

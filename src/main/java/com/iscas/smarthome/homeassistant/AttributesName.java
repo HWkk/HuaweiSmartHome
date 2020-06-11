@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * 测试用，设备对应的属性名称
+ */
 public class AttributesName {
 
     //key为entity_id, value为mode属性在HA中的key值
@@ -54,6 +57,9 @@ public class AttributesName {
         attributesName.put(entityName, attributes);
     }
 
+    /**
+     * 属性过滤方法
+     */
     public static List<String> filter(String line) {
         List<String> res = new ArrayList<>();
         String[] attributes = line.split(",");

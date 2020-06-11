@@ -9,9 +9,15 @@ import com.iscas.smarthome.utils.CurveUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 模型内部图表示
+ */
 public class InnerGraph implements Graph {
 
+    //内部状态
     private List<InnerState> states;
+
+    //概率信息计算使用
     private List<Integer> leaveCounts;
     private int totalLeaveCount;
 
@@ -47,10 +53,16 @@ public class InnerGraph implements Graph {
         leaveCounts.set(index, leaveCounts.get(index) + 1);
     }
 
+    /**
+     * 计算内部概率
+     */
     public double getLeavePercent(int index) {
         return totalLeaveCount == 0 ? 0.0 : ((double)leaveCounts.get(index) / totalLeaveCount);
     }
 
+    /**
+     * 弃用
+     */
     public Attribute getAvg() {
         Attribute attribute = new Attribute();
         if(states.size() == 0) return attribute;
@@ -65,6 +77,9 @@ public class InnerGraph implements Graph {
         return attribute;
     }
 
+    /**
+     * 弃用
+     */
     public List<CurveStatistics> getCurveStatistics() {
         List<CurveStatistics> res = new ArrayList<>();
         if(states == null || states.size() == 0) return res;
@@ -79,10 +94,16 @@ public class InnerGraph implements Graph {
         return res;
     }
 
+    /**
+     * 内部状态数量
+     */
     public int getStateSize() {
         return states.size();
     }
 
+    /**
+     * 获取指定index的内部状态
+     */
     public InnerState getState(int index) {
         if(index >= states.size()) return states.get(states.size() - 1);
         return states.get(index);

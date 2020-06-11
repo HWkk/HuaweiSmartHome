@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 弃用
+ */
 public class CheckThread implements Runnable{
 
     OuterGraph graph;
