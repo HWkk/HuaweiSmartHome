@@ -22,9 +22,6 @@ public class StartController {
 
     OuterGraph graph;
     String entityName;
-    int getAttrTimeGap = 2;
-    int callServiceTimeGap = 10;
-    int getAttrAfterCallingTimeGap = 2;
 
     @Autowired
     private CustomWebSocket webSocket;

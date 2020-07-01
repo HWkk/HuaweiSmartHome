@@ -61,7 +61,8 @@ public class PythonFigureUtils {
 
         String[] args = new String[8];
         args[0] = "python";
-        args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/figures/linechart_single.py";
+//        args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/figures/linechart_single.py";
+        args[1] = "./linechart_single.py";
         args[2] = "time(s)";
 
         String[] times = new String[data.size()];
@@ -107,7 +108,8 @@ public class PythonFigureUtils {
 
         String[] args = new String[8];
         args[0] = "python";
-        args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/figures/linechart_two.py";
+//        args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/figures/linechart_two.py";
+        args[1] = "./linechart_two.py";
         args[2] = "time(s)";
 
         List<List<String>> times = new ArrayList<>();

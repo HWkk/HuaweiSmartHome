@@ -230,7 +230,7 @@ public class OuterState implements State, Externalizable {
             index = curOuter.getInnerGraph().getStateSize() - 1;
         index--;
         double maxInfluence = Double.MIN_VALUE;
-        String event = "";
+        String event = "工作时间太长或者环境突变";
 
         for(int i = 0; i < Constants.BACK_COUNT; i++) {
             String curEvent = "工作时间太长或者环境突变";

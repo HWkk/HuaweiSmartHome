@@ -8,7 +8,7 @@ from matplotlib.pyplot import MultipleLocator
 
 def draw_linechart(x_name, x_values, y_name, y_legends, y_values, save_file):
     mpl.rcParams['axes.linewidth'] = 1.2
-    plt.rc('font', family='Helvetica', size=10, weight='roman')
+    plt.rc('font', family='Helvetica', size=15, weight='roman')
     plt.rc('pdf', fonttype=42)
     # plt.figure(figsize=(4.0, 2.5))
     # plt.subplots_adjust(

@@ -1,7 +1,6 @@
 package com.iscas.smarthome.homeassistant;
 
 import com.iscas.smarthome.data.Data;
-import com.iscas.smarthome.utils.Constants;
 import com.iscas.smarthome.utils.InputUtils;
 import org.apache.log4j.Logger;
 
@@ -25,7 +24,8 @@ public class HAScript {
             String[] args = new String[ATTR_ARGS_PREFIX + attributes.size()];
             args[0] = "python";
 //            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/get_attribute.py";
-            args[1] = Constants.SCRIPT_LOCATION + "get_attribute.py";
+//            args[1] = Constants.SCRIPT_LOCATION + "get_attribute.py";
+            args[1] = "./get_attribute.py";
             args[2] = entityId;
             args[3] = AttributesName.getModeName(entityId);
             for(int i = ATTR_ARGS_PREFIX; i < args.length; i++)
@@ -65,7 +65,8 @@ public class HAScript {
             String[] args = new String[3];
             args[0] = "python";
 //            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/get_all.py";
-            args[1] = Constants.SCRIPT_LOCATION + "get_all.py";
+//            args[1] = Constants.SCRIPT_LOCATION + "get_all.py";
+            args[1] = "./get_all.py";
             args[2] = entityId;
 
             Process proc = Runtime.getRuntime().exec(args);// 执行py文件
@@ -95,7 +96,8 @@ public class HAScript {
             String[] args = new String[2];
             args[0] = "python";
 //            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/get_service.py";
-            args[1] = Constants.SCRIPT_LOCATION + "get_service.py";
+//            args[1] = Constants.SCRIPT_LOCATION + "get_service.py";
+            args[1] = "./get_service.py";
 
             Process proc = Runtime.getRuntime().exec(args);// 执行py文件
             BufferedReader in = new BufferedReader(new InputStreamReader(proc.getInputStream()));
@@ -122,7 +124,8 @@ public class HAScript {
             String[] args = new String[4];
             args[0] = "python";
 //            args[1] = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/call_service.py";
-            args[1] = Constants.SCRIPT_LOCATION + "call_service.py";
+//            args[1] = Constants.SCRIPT_LOCATION + "call_service.py";
+            args[1] = "./call_service.py";
             args[2] = entityId;
             args[3] = serviceName;
 

@@ -56,12 +56,15 @@ public class Constants {
     //数据条数达到此阈值后，才开始进行检测过程，否则结果不准确
     public static int CHECK_DATA_MIN_THRESHOLD = 50;
 
+    //项目地址
+    public static String REPO_LOCATION = "/Users/kk/Repositories/HuaweiSmartHome/";
+
     //用于展示的模型图片目录
-    public static String MODEL_PNG_DIR = "/Users/kk/Repositories/HuaweiSmartHome/frontend/public/img/model/";
+    public static String MODEL_PNG_DIR = REPO_LOCATION + "frontend/public/img/model/";
 
     //用于展示的属性图片目录
-    public static String ATTRIBUTE_PNG_DIR = "/Users/kk/Repositories/HuaweiSmartHome/frontend/public/img/attribute/";
+    public static String ATTRIBUTE_PNG_DIR = REPO_LOCATION + "frontend/public/img/attribute/";
 
-    //脚本地址（项目地址）
-    public static String SCRIPT_LOCATION = "/Users/kk/Repositories/HuaweiSmartHome/src/main/java/com/iscas/smarthome/homeassistant/";
+    //脚本地址
+    public static String SCRIPT_LOCATION = REPO_LOCATION + "src/main/java/com/iscas/smarthome/homeassistant/";
 }
