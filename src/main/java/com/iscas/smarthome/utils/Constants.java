@@ -67,4 +67,7 @@ public class Constants {
 
     //脚本地址
     public static String SCRIPT_LOCATION = REPO_LOCATION + "src/main/java/com/iscas/smarthome/homeassistant/";
+
+    //画图脚本地址
+    public static String DRAW_FIGURE_LOCATION = REPO_LOCATION + "src/main/java/com/iscas/smarthome/figures/";
 }

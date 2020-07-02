@@ -12,6 +12,7 @@
     <artifactId>smarthome</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>smarthome</name>
+    <packaging>jar</packaging>
     <description>Huawei SmartHome Abnormal Detection and Address</description>
 
     <properties>
@@ -55,7 +56,22 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.5</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.pancm.App</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
-
 </project>
